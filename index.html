@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online tools for image compression, PDF manipulation, and more. Easy to use, no installation required.">
+    <meta name="keywords" content="online tools, image compression, PDF tools, image converter, PDF editor">
+    <meta name="author" content="Your Name">
+    <meta name="robots" content="index, follow">
+    <title>ToolsHub - Free Online Image & PDF Tools</title>
+
+    <!-- Replace YOUR-ADSENSE-ID with your actual AdSense Publisher ID -->
+    <script>
+        const ADSENSE_ID = 'YOUR-ADSENSE-ID';
+    </script>
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: ADSENSE_ID,
+            enable_page_level_ads: true
+        });
+    </script>
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #6366f1;
+            --primary-dark: #4338ca;
+            --secondary: #f0f2f5;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --white: #ffffff;
+            --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+            --radius-lg: 16px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--secondary);
+        }
+
+        /* Navigation Styles */
+        .main-nav {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-button {
+            text-decoration: none;
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: rgba(99, 102, 241, 0.1);
+            transform: translateY(-1px);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 4rem 1rem;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 250px 1fr 250px;
+            gap: 2rem;
+        }
+
+        /* Tools Grid */
+        .tools-section {
+            grid-column: 2;
+            padding: 2rem 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            margin: 0.5rem auto;
+            border-radius: 2px;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .tool-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .tool-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .tool-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Ad Spaces */
+        .ad-sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .ad-container {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 1rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            margin-bottom: 1rem;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ad-top {
+            margin-bottom: 2rem;
+            grid-column: 1 / -1;
+        }
+
+        .ad-bottom {
+            margin-top: 2rem;
+            grid-column: 1 / -1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .tools-section {
+                grid-column: 1;
+            }
+
+            .ad-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-tools"></i>
+                ToolsHub
+            </a>
+            <div class="nav-links">
+                <a href="tools/index.html" class="nav-button">Home</a>
+                <a href="#image-tools" class="nav-button">Image Tools</a>
+                <a href="#pdf-tools" class="nav-button">PDF Tools</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Free Online Tools for Everyone</h1>
+            <p>Powerful image and PDF tools at your fingertips. No installation required.</p>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <!-- Left Sidebar Ads -->
+        <aside class="ad-sidebar">
+    <div class="ad-container">
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-ADSENSE_ID"
+                    data-ad-slot="LEFT-SIDEBAR-AD-SLOT"
+                    data-ad-format="vertical"
+                    data-full-width-responsive="false"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </aside>
+
+        <!-- Tools Section -->
+        <section class="tools-section">
+            <!-- Top Ad -->
+            <div class="ad-container ad-top">
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-ADSENSE_ID"
+                    data-ad-slot="TOP-AD-SLOT"
+                    data-ad-format="horizontal"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+            <!-- Image Tools -->
+            <h2 id="image-tools" class="section-title">Image Tools</h2>
+        <div class="tools-grid">
+                <a href="/image-compressor.html" class="tool-card">
+                <i class="fas fa-compress tool-icon"></i>
+                <h3 class="tool-title">Image Compressor</h3>
+                <p class="tool-description">Compress images without losing quality</p>
+            </a>
+                <a href="/image-converter.html" class="tool-card">
+                <i class="fas fa-exchange-alt tool-icon"></i>
+                <h3 class="tool-title">Image Converter</h3>
+                    <p class="tool-description">Convert between different image formats</p>
+            </a>
+                <a href="/image-resizer.html" class="tool-card">
+                    <i class="fas fa-expand tool-icon"></i>
+                <h3 class="tool-title">Image Resizer</h3>
+                    <p class="tool-description">Resize images to exact dimensions</p>
+            </a>
+                <a href="/image-cropper.html" class="tool-card">
+                    <i class="fas fa-crop tool-icon"></i>
+                <h3 class="tool-title">Image Cropper</h3>
+                <p class="tool-description">Crop images to perfect size</p>
+            </a>
+                <a href="/image-editor.html" class="tool-card">
+                    <i class="fas fa-edit tool-icon"></i>
+                    <h3 class="tool-title">Image Editor</h3>
+                    <p class="tool-description">Basic image editing tools</p>
+                </a>
+                <a href="/watermark.html" class="tool-card">
+                    <i class="fas fa-copyright tool-icon"></i>
+                    <h3 class="tool-title">Add Watermark</h3>
+                    <p class="tool-description">Add text or image watermarks</p>
+                </a>
+                <a href="/image-effects.html" class="tool-card">
+                <i class="fas fa-magic tool-icon"></i>
+                    <h3 class="tool-title">Image Effects</h3>
+                <p class="tool-description">Apply filters and effects</p>
+            </a>
+                <a href="/background-remover.html" class="tool-card">
+                    <i class="fas fa-eraser tool-icon"></i>
+                    <h3 class="tool-title">Background Remover</h3>
+                    <p class="tool-description">Remove image backgrounds</p>
+                </a>
+                <a href="/image-optimizer.html" class="tool-card">
+                    <i class="fas fa-tachometer-alt tool-icon"></i>
+                    <h3 class="tool-title">Image Optimizer</h3>
+                    <p class="tool-description">Optimize images for web</p>
+                </a>
+                <a href="/metadata-remover.html" class="tool-card">
+                    <i class="fas fa-eye-slash tool-icon"></i>
+                    <h3 class="tool-title">Metadata Remover</h3>
+                    <p class="tool-description">Remove image metadata</p>
+            </a>
+        </div>
+
+            <!-- PDF Tools -->
+            <h2 id="pdf-tools" class="section-title">PDF Tools</h2>
+        <div class="tools-grid">
+                <a href="/pdf-compressor.html" class="tool-card">
+                <i class="fas fa-file-archive tool-icon"></i>
+                <h3 class="tool-title">PDF Compressor</h3>
+                <p class="tool-description">Reduce PDF file size</p>
+            </a>
+                <a href="/pdf-merger.html" class="tool-card">
+                <i class="fas fa-object-group tool-icon"></i>
+                <h3 class="tool-title">PDF Merger</h3>
+                <p class="tool-description">Combine multiple PDFs</p>
+            </a>
+                <a href="/pdf-splitter.html" class="tool-card">
+                <i class="fas fa-cut tool-icon"></i>
+                <h3 class="tool-title">PDF Splitter</h3>
+                    <p class="tool-description">Split PDF into parts</p>
+            </a>
+                <a href="/pdf-converter.html" class="tool-card">
+                <i class="fas fa-exchange-alt tool-icon"></i>
+                <h3 class="tool-title">PDF Converter</h3>
+                <p class="tool-description">Convert PDFs to other formats</p>
+            </a>
+                <a href="/pdf-editor.html" class="tool-card">
+                <i class="fas fa-edit tool-icon"></i>
+                <h3 class="tool-title">PDF Editor</h3>
+                    <p class="tool-description">Edit PDF content</p>
+                </a>
+                <a href="/pdf-to-image.html" class="tool-card">
+                    <i class="fas fa-file-image tool-icon"></i>
+                    <h3 class="tool-title">PDF to Image</h3>
+                    <p class="tool-description">Convert PDF to images</p>
+                </a>
+                <a href="/image-to-pdf.html" class="tool-card">
+                    <i class="fas fa-file-pdf tool-icon"></i>
+                    <h3 class="tool-title">Image to PDF</h3>
+                    <p class="tool-description">Convert images to PDF</p>
+                </a>
+                <a href="/pdf-protect.html" class="tool-card">
+                <i class="fas fa-lock tool-icon"></i>
+                <h3 class="tool-title">PDF Protector</h3>
+                <p class="tool-description">Add password protection</p>
+            </a>
+                <a href="/pdf-unlock.html" class="tool-card">
+                    <i class="fas fa-unlock tool-icon"></i>
+                    <h3 class="tool-title">PDF Unlocker</h3>
+                    <p class="tool-description">Remove PDF restrictions</p>
+                </a>
+                <a href="/pdf-organizer.html" class="tool-card">
+                    <i class="fas fa-sort tool-icon"></i>
+                    <h3 class="tool-title">PDF Organizer</h3>
+                    <p class="tool-description">Reorder PDF pages</p>
+                </a>
+        </div>
+
+    <!-- Bottom Ad -->
+            <div class="ad-container ad-bottom">
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-ADSENSE_ID"
+            data-ad-slot="BOTTOM-AD-SLOT"
+                    data-ad-format="horizontal"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+        </section>
+
+        <!-- Right Sidebar Ads -->
+        <aside class="ad-sidebar">
+            <div class="ad-container">
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-ADSENSE_ID"
+                    data-ad-slot="RIGHT-SIDEBAR-AD-SLOT"
+                    data-ad-format="vertical"
+                    data-full-width-responsive="false"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+        </div>
+        </aside>
+    </main>
+</body>
+</html> 
