@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online PDF to Image converter. Convert PDF to JPG, JPEG, PNG with custom size and quality. Fast, secure, and easy to use. Up to 100MB supported.">
+    <meta name="keywords" content="pdf to image, pdf to jpg, pdf to jpeg, pdf to png, convert pdf to image, pdf converter, online pdf converter, image converter">
+    <meta name="author" content="ToolsHub">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="PDF to Image Converter - Free Online Tool | ToolsHub">
+    <meta property="og:description" content="Convert PDF to images online. Free tool supporting files up to 100MB. Choose image size, quality, and format. Easy to use, no registration required.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/pdf-to-image">
+    <title>PDF to Image Converter - Free Online Tool | ToolsHub</title>
+
+    <!-- Required Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR-ADSENSE-ID"></script>
+
+    <!-- AdSense Configuration -->
+    <script>
+        // AdSense Configuration - Just replace these values with your ad unit IDs
+        const ADSENSE_CONFIG = {
+            topBanner: 'YOUR-TOP-BANNER-AD-UNIT-ID',
+            leftSidebar: 'YOUR-LEFT-SIDEBAR-AD-UNIT-ID',
+            rightSidebar: 'YOUR-RIGHT-SIDEBAR-AD-UNIT-ID',
+            bottomBanner: 'YOUR-BOTTOM-BANNER-AD-UNIT-ID'
+        };
+    </script>
+
+    <style>
+        /* Modern Variables */
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #6366f1;
+            --primary-dark: #4338ca;
+            --secondary: #f8fafc;
+            --accent: #f59e0b;
+            --text-primary: #1f2937;
+            --text-secondary: #64748b;
+            --white: #ffffff;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --gradient-primary: linear-gradient(135deg, #4f46e5, #6366f1);
+            --gradient-accent: linear-gradient(135deg, #f59e0b, #fbbf24);
+            --gradient-success: linear-gradient(135deg, #10b981, #34d399);
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+            --radius: 12px;
+            --radius-lg: 16px;
+            --transition: all 0.3s ease;
+            --container-width: 1400px;
+            --header-height: 80px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            padding-top: var(--header-height);
+        }
+
+        /* Navigation */
+        .main-nav {
+            background: var(--white);
+            box-shadow: var(--shadow-lg);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            z-index: 1000;
+            border-bottom: 4px solid var(--primary);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .nav-container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: var(--transition);
+        }
+
+        .logo i {
+            color: #ff0000 !important;
+            background: none !important;
+            -webkit-background-clip: initial !important;
+            -webkit-text-fill-color: initial !important;
+            font-size: 2rem;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-menu a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: var(--transition);
+            transform: translateX(-50%);
+        }
+
+        .nav-menu a:hover::before {
+            width: 80%;
+        }
+
+        .nav-menu a.active {
+            background: var(--gradient-primary);
+            color: var(--white);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Tool Container */
+        .tool-container {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-xl);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        .tool-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .tool-header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tool-header p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        /* Features Grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--white);
+            border-radius: var(--radius);
+            transition: var(--transition);
+            border: 1px solid rgba(79, 70, 229, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 0;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature:hover::before {
+            opacity: 0.05;
+        }
+
+        .feature i {
+            font-size: 2.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            margin: 3rem 0;
+        }
+
+        .upload-container {
+            border: 3px dashed var(--primary-light);
+            border-radius: var(--radius-lg);
+            padding: 3rem;
+            text-align: center;
+            background: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .upload-container:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .upload-container:hover::before {
+            opacity: 0.05;
+        }
+
+        .upload-container.dragover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        /* Settings Section */
+        .settings-section {
+            margin: 3rem 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .setting-group {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(79, 70, 229, 0.1);
+            transition: var(--transition);
+        }
+
+        .setting-group:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .setting-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .setting-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--text-secondary);
+            border-radius: var(--radius);
+            background: var(--white);
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        .setting-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        /* Preview Section */
+        .preview-section {
+            margin: 3rem 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .preview-card {
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+            background: var(--white);
+            padding: 1rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            transition: var(--transition);
+            border: 1px solid rgba(79, 70, 229, 0.1);
+        }
+
+        .preview-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .preview-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            border-radius: var(--radius);
+            transition: var(--transition);
+            max-width: 100%;
+        }
+
+        .preview-card:hover img {
+            transform: scale(1.02);
+        }
+
+        .preview-card .remove-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--error);
+            color: var(--white);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .preview-card .remove-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: var(--transition);
+        }
+
+        .btn:hover::before {
+            transform: translateX(100%);
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--text-primary);
+            border: 1px solid var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* Ad Containers */
+        .ad-container {
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+            margin: 2rem 0;
+            text-align: center;
+            background: var(--white);
+            padding: 1rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .ad-sidebar {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 160px;
+            max-width: 160px;
+            overflow: hidden;
+            z-index: 100;
+        }
+
+        .ad-sidebar.left {
+            left: 1rem;
+        }
+
+        .ad-sidebar.right {
+            right: 1rem;
+        }
+
+        .ad-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+            background: var(--secondary);
+            border: 2px dashed var(--primary-light);
+            border-radius: var(--radius);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        /* Message Box */
+        .message-box {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem 2rem;
+            border-radius: var(--radius);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 1000;
+            animation: slideUp 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(10px);
+            max-width: 90%;
+            width: auto;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .message-box.success {
+            background: var(--gradient-success);
+        }
+
+        .message-box.error {
+            background: linear-gradient(135deg, #ef4444, #f87171);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translate(-50%, 100%);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .ad-sidebar {
+                display: none;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .tool-container {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 2rem;
+                word-wrap: break-word;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .upload-container {
+                padding: 2rem;
+            }
+
+            .settings-section {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .preview-section {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .preview-card img {
+                height: 180px;
+            }
+
+            .message-box {
+                width: 90%;
+                white-space: normal;
+                text-align: center;
+            }
+
+            .features {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 0.5rem;
+            }
+
+            .tool-container {
+                padding: 1rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .nav-container {
+                padding: 0.5rem 1rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .feature {
+                padding: 1.2rem;
+            }
+
+            .feature i {
+                font-size: 2rem;
+            }
+
+            .setting-group {
+                padding: 1.2rem;
+            }
+
+            .preview-card {
+                padding: 0.8rem;
+            }
+
+            .preview-card img {
+                height: 180px;
+            }
+        }
+
+        /* Page Range Inputs */
+        .page-range-inputs {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--secondary);
+            padding: 0.5rem;
+            border-radius: var(--radius);
+            flex-wrap: wrap;
+        }
+
+        .page-input {
+            width: 80px;
+            padding: 0.5rem;
+            border: 1px solid var(--text-secondary);
+            border-radius: var(--radius);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .page-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        /* Custom Size Inputs */
+        .custom-size-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            background: var(--secondary);
+            padding: 0.5rem;
+            border-radius: var(--radius);
+        }
+
+        .custom-size-input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--text-secondary);
+            border-radius: var(--radius);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .custom-size-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-file-pdf"></i>
+                PDF Converter
+            </a>
+            <div class="nav-menu">
+                <a href="/" class="active">Home</a>
+                <a href="/image-tools">Image Tools</a>
+                <a href="/pdf-tools">PDF Tools</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- Top Ad Banner -->
+        <div class="ad-container">
+            <div class="ad-placeholder" id="topBannerAd">
+                <div>
+                    <i class="fas fa-ad"></i><br>
+                    Top Banner Ad
+                </div>
+            </div>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({
+                    google_ad_client: ADSENSE_CONFIG.topBanner,
+                    enable_page_level_ads: true
+                });
+            </script>
+        </div>
+
+        <!-- Left Sidebar Ad -->
+        <aside class="ad-sidebar left">
+            <div class="ad-container">
+                <div class="ad-placeholder" id="leftSidebarAd">
+                    <div>
+                        <i class="fas fa-ad"></i><br>
+                        Left Sidebar Ad
+                    </div>
+                </div>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({
+                        google_ad_client: ADSENSE_CONFIG.leftSidebar,
+                        enable_page_level_ads: true
+                    });
+                </script>
+            </div>
+        </aside>
+
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>PDF to Image Converter</h1>
+                <p>Convert your PDF to images with custom size, quality, and format settings</p>
+                
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-file-image"></i>
+                        <span>Multiple Formats<br>JPG, JPEG, PNG</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-compress-arrows-alt"></i>
+                        <span>Custom Image Size<br>HD, Full HD, etc.</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>Quality Control<br>Up to 100%</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-file-upload"></i>
+                        <span>Up to 100MB<br>File Size</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="upload-section">
+                <div class="upload-container" id="dropZone">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <h3>Drop your PDF here or click to browse</h3>
+                    <p>Supported format: PDF (Max: 100MB)</p>
+                    <input type="file" id="fileInput" accept="application/pdf" style="display: none;">
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="setting-group">
+                    <label for="imageFormat">Image Format</label>
+                    <select id="imageFormat">
+                        <option value="jpeg">JPEG</option>
+                        <option value="jpg">JPG</option>
+                        <option value="png">PNG</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label for="pageSize">Page Size</label>
+                    <select id="pageSize">
+                        <option value="A4">A4 (210 × 297 mm)</option>
+                        <option value="Letter">Letter (216 × 279 mm)</option>
+                        <option value="Legal">Legal (216 × 356 mm)</option>
+                        <option value="A3">A3 (297 × 420 mm)</option>
+                        <option value="A5">A5 (148 × 210 mm)</option>
+                        <option value="custom">Custom Size</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label for="pageOrientation">Page Orientation</label>
+                    <select id="pageOrientation">
+                        <option value="portrait">Portrait</option>
+                        <option value="landscape">Landscape</option>
+                        <option value="auto">Auto (Based on content)</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label for="imageSize">Image Size</label>
+                    <select id="imageSize">
+                        <option value="original">Original Size</option>
+                        <option value="hd">HD (1280x720)</option>
+                        <option value="fullhd">Full HD (1920x1080)</option>
+                        <option value="4k">4K (3840x2160)</option>
+                        <option value="custom">Custom Size</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label for="imageQuality">Image Quality</label>
+                    <select id="imageQuality">
+                        <option value="high">High Quality (Large file size)</option>
+                        <option value="medium" selected>Medium Quality (Recommended)</option>
+                        <option value="low">Low Quality (Small file size)</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label for="pageRange">Page Range</label>
+                    <div class="page-range-inputs">
+                        <input type="number" id="startPage" min="1" placeholder="Start" class="page-input">
+                        <span>to</span>
+                        <input type="number" id="endPage" min="1" placeholder="End" class="page-input">
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <label for="cropArea">Crop Area</label>
+                    <select id="cropArea">
+                        <option value="full">Full Page</option>
+                        <option value="content">Content Area Only</option>
+                        <option value="custom">Custom Area</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="preview-section" id="previewSection">
+                <!-- Preview cards will be added here dynamically -->
+            </div>
+
+            <div class="button-group">
+                <button id="convertBtn" class="btn btn-primary" disabled>
+                    <i class="fas fa-file-image"></i>
+                    Convert to Images
+                </button>
+                <button id="clearBtn" class="btn btn-secondary" disabled>
+                    <i class="fas fa-trash"></i>
+                    Clear All
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Sidebar Ad -->
+        <aside class="ad-sidebar right">
+            <div class="ad-container">
+                <div class="ad-placeholder" id="rightSidebarAd">
+                    <div>
+                        <i class="fas fa-ad"></i><br>
+                        Right Sidebar Ad
+                    </div>
+                </div>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({
+                        google_ad_client: ADSENSE_CONFIG.rightSidebar,
+                        enable_page_level_ads: true
+                    });
+                </script>
+            </div>
+        </aside>
+
+        <!-- Bottom Ad Banner -->
+        <div class="ad-container">
+            <div class="ad-placeholder" id="bottomBannerAd">
+                <div>
+                    <i class="fas fa-ad"></i><br>
+                    Bottom Banner Ad
+                </div>
+            </div>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({
+                    google_ad_client: ADSENSE_CONFIG.bottomBanner,
+                    enable_page_level_ads: true
+                });
+            </script>
+        </div>
+    </main>
+
+    <script>
+        // Initialize PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        // Constants
+        const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
+        const SUPPORTED_TYPES = ['application/pdf'];
+        
+        // DOM Elements
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const previewSection = document.getElementById('previewSection');
+        const convertBtn = document.getElementById('convertBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const imageFormat = document.getElementById('imageFormat');
+        const imageSize = document.getElementById('imageSize');
+        const imageQuality = document.getElementById('imageQuality');
+        const pageSize = document.getElementById('pageSize');
+        const pageOrientation = document.getElementById('pageOrientation');
+        const startPage = document.getElementById('startPage');
+        const endPage = document.getElementById('endPage');
+        const cropArea = document.getElementById('cropArea');
+
+        // State
+        let selectedFile = null;
+        let pdfDoc = null;
+
+        // Event Listeners
+        dropZone.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', handleFileSelect);
+        convertBtn.addEventListener('click', convertToImages);
+        clearBtn.addEventListener('click', clearAll);
+
+        // Drag and Drop
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFiles(Array.from(e.dataTransfer.files));
+        });
+
+        // File Handling Functions
+        function handleFileSelect(e) {
+            handleFiles(Array.from(e.target.files));
+        }
+
+        function handleFiles(files) {
+            if (files.length === 0) return;
+
+            const file = files[0];
+            if (!SUPPORTED_TYPES.includes(file.type)) {
+                showMessage('Please select a valid PDF file', 'error');
+                return;
+            }
+
+            if (file.size > MAX_FILE_SIZE) {
+                showMessage('File size exceeds the 100MB limit', 'error');
+                return;
+            }
+
+            selectedFile = file;
+            loadPDF(file);
+            updateButtons();
+            showMessage('PDF loaded successfully', 'success');
+        }
+
+        async function loadPDF(file) {
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                pdfDoc = await pdfjsLib.getDocument(arrayBuffer).promise;
+                await updatePreview();
+                await updatePageRange();
+            } catch (error) {
+                console.error(error);
+                showMessage('Error loading PDF. Please try again.', 'error');
+            }
+        }
+
+        // Preview Functions
+        async function updatePreview() {
+            if (!pdfDoc) return;
+
+            previewSection.innerHTML = '';
+            const numPages = pdfDoc.numPages;
+
+            for (let i = 1; i <= Math.min(numPages, 3); i++) {
+                const page = await pdfDoc.getPage(i);
+                const viewport = page.getViewport({ scale: 0.5 });
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                await page.render({
+                    canvasContext: context,
+                    viewport: viewport
+                }).promise;
+
+                const card = document.createElement('div');
+                card.className = 'preview-card';
+                card.innerHTML = `
+                    <img src="${canvas.toDataURL()}" alt="Page ${i}">
+                    <p>Page ${i}</p>
+                `;
+                previewSection.appendChild(card);
+            }
+
+            if (numPages > 3) {
+                const moreCard = document.createElement('div');
+                moreCard.className = 'preview-card';
+                moreCard.innerHTML = `
+                    <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: var(--secondary); border-radius: var(--radius);">
+                        <p>+${numPages - 3} more pages</p>
+                    </div>
+                `;
+                previewSection.appendChild(moreCard);
+            }
+        }
+
+        function updateButtons() {
+            const hasFile = selectedFile !== null;
+            convertBtn.disabled = !hasFile;
+            clearBtn.disabled = !hasFile;
+        }
+
+        function clearAll() {
+            selectedFile = null;
+            pdfDoc = null;
+            updatePreview();
+            updateButtons();
+            fileInput.value = '';
+            showMessage('All files cleared', 'success');
+        }
+
+        // Conversion Functions
+        async function convertToImages() {
+            try {
+                convertBtn.disabled = true;
+                showMessage('Converting PDF to images...', 'success');
+
+                const format = imageFormat.value;
+                const quality = getQualityValue();
+                const { width, height } = getImageDimensions();
+                const start = parseInt(startPage.value) || 1;
+                const end = parseInt(endPage.value) || pdfDoc.numPages;
+                
+                for (let i = start; i <= end; i++) {
+                    const page = await pdfDoc.getPage(i);
+                    const viewport = page.getViewport({ scale: 1 });
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    
+                    // Set canvas dimensions based on page size and orientation
+                    const pageDimensions = getPageDimensions();
+                    canvas.height = pageDimensions.height;
+                    canvas.width = pageDimensions.width;
+
+                    // Calculate scale based on page size
+                    const scale = Math.min(
+                        pageDimensions.width / viewport.width,
+                        pageDimensions.height / viewport.height
+                    );
+
+                    await page.render({
+                        canvasContext: context,
+                        viewport: page.getViewport({ scale })
+                    }).promise;
+
+                    // Apply cropping if needed
+                    if (cropArea.value !== 'full') {
+                        const croppedCanvas = await cropImage(canvas, cropArea.value);
+                        canvas.width = croppedCanvas.width;
+                        canvas.height = croppedCanvas.height;
+                        context.drawImage(croppedCanvas, 0, 0);
+                    }
+
+                    // Convert to blob with quality settings
+                    const blob = await new Promise(resolve => {
+                        canvas.toBlob(resolve, `image/${format}`, quality);
+                    });
+
+                    // Download the image
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `page-${i}.${format}`;
+                    link.click();
+                    URL.revokeObjectURL(url);
+                }
+
+                showMessage('Conversion completed successfully!', 'success');
+            } catch (error) {
+                console.error(error);
+                showMessage('Error converting PDF. Please try again.', 'error');
+            } finally {
+                convertBtn.disabled = false;
+            }
+        }
+
+        function getQualityValue() {
+            switch (imageQuality.value) {
+                case 'high': return 1.0;    // Maximum quality
+                case 'low': return 0.4;     // More compression
+                default: return 0.7;        // Balanced quality
+            }
+        }
+
+        function getImageDimensions() {
+            switch (imageSize.value) {
+                case 'hd': return { width: 1280, height: 720 };
+                case 'fullhd': return { width: 1920, height: 1080 };
+                case '4k': return { width: 3840, height: 2160 };
+                case 'custom': return { width: 1920, height: 1080 }; // Default to Full HD
+                default: return { width: 1920, height: 1080 }; // Default to Full HD
+            }
+        }
+
+        function getPageDimensions() {
+            // Dimensions in pixels (1 point = 1/72 inch)
+            const dimensions = {
+                'A4': { width: 595, height: 842 },
+                'Letter': { width: 612, height: 792 },
+                'Legal': { width: 612, height: 1008 },
+                'A3': { width: 842, height: 1191 },
+                'A5': { width: 420, height: 595 }
+            };
+
+            let { width, height } = dimensions[pageSize.value] || dimensions['A4'];
+
+            if (pageOrientation.value === 'landscape' || 
+                (pageOrientation.value === 'auto' && width < height)) {
+                [width, height] = [height, width];
+            }
+
+            return { width, height };
+        }
+
+        async function cropImage(canvas, cropType) {
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            
+            if (cropType === 'content') {
+                // Get the content bounds
+                const imageData = tempCtx.getImageData(0, 0, canvas.width, canvas.height);
+                const bounds = getContentBounds(imageData);
+                
+                // Create new canvas with content dimensions
+                tempCanvas.width = bounds.width;
+                tempCanvas.height = bounds.height;
+                
+                // Draw only the content area
+                tempCtx.drawImage(
+                    canvas,
+                    bounds.x, bounds.y, bounds.width, bounds.height,
+                    0, 0, bounds.width, bounds.height
+                );
+            } else if (cropType === 'custom') {
+                // For custom cropping, you would implement the cropping logic here
+                // This could involve a cropping interface or predefined crop areas
+                tempCanvas.width = canvas.width;
+                tempCanvas.height = canvas.height;
+                tempCtx.drawImage(canvas, 0, 0);
+            }
+
+            return tempCanvas;
+        }
+
+        function getContentBounds(imageData) {
+            let minX = imageData.width;
+            let minY = imageData.height;
+            let maxX = 0;
+            let maxY = 0;
+
+            const data = imageData.data;
+            for (let y = 0; y < imageData.height; y++) {
+                for (let x = 0; x < imageData.width; x++) {
+                    const i = (y * imageData.width + x) * 4;
+                    if (data[i + 3] > 0) { // Check alpha channel
+                        minX = Math.min(minX, x);
+                        minY = Math.min(minY, y);
+                        maxX = Math.max(maxX, x);
+                        maxY = Math.max(maxY, y);
+                    }
+                }
+            }
+
+            return {
+                x: minX,
+                y: minY,
+                width: maxX - minX + 1,
+                height: maxY - minY + 1
+            };
+        }
+
+        // Update page range when PDF is loaded
+        async function updatePageRange() {
+            if (!pdfDoc) return;
+            
+            const numPages = pdfDoc.numPages;
+            startPage.max = numPages;
+            endPage.max = numPages;
+            endPage.value = numPages;
+            startPage.value = 1;
+        }
+
+        // UI Functions
+        function showMessage(message, type) {
+            const messageBox = document.createElement('div');
+            messageBox.className = `message-box ${type}`;
+            messageBox.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(messageBox);
+            setTimeout(() => messageBox.remove(), 3000);
+        }
+
+        // AdSense Initialization
+        function initializeAds() {
+            // Replace placeholder divs with actual ad units
+            const adUnits = {
+                'topBannerAd': ADSENSE_CONFIG.topBanner,
+                'leftSidebarAd': ADSENSE_CONFIG.leftSidebar,
+                'rightSidebarAd': ADSENSE_CONFIG.rightSidebar,
+                'bottomBannerAd': ADSENSE_CONFIG.bottomBanner
+            };
+
+            for (const [id, adUnitId] of Object.entries(adUnits)) {
+                const placeholder = document.getElementById(id);
+                if (placeholder && adUnitId !== 'YOUR-TOP-BANNER-AD-UNIT-ID') {
+                    placeholder.innerHTML = `
+                        <ins class="adsbygoogle"
+                             style="display:block"
+                             data-ad-client="${adUnitId}"
+                             data-ad-slot="${adUnitId}"
+                             data-ad-format="auto"
+                             data-full-width-responsive="true"></ins>
+                    `;
+                }
+            }
+        }
+
+        // Initialize ads when the page loads
+        window.addEventListener('load', initializeAds);
+    </script>
+</body>
+</html> 
