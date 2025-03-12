@@ -1,0 +1,3716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online image cropper tool. Crop, resize, and optimize images with custom size and quality. Support for JPG, JPEG, PNG formats. Fast, secure, and easy to use. Up to 100MB supported.">
+    <meta name="keywords" content="image cropper, image resize, image optimizer, crop image, resize image, image editor, online image editor">
+    <meta name="author" content="ToolsHub">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Image Cropper - Free Online Tool | ToolsHub">
+    <meta property="og:description" content="Crop and resize images online. Free tool supporting files up to 100MB. Choose image size, quality, and format. Easy to use, no registration required.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/image-cropper">
+    <title>Image Cropper - Free Online Tool | ToolsHub</title>
+
+    <!-- Required Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR-ADSENSE-ID"></script>
+
+    <!-- AdSense Configuration -->
+    <script>
+        const ADSENSE_CONFIG = {
+            topBanner: 'YOUR-TOP-BANNER-AD-UNIT-ID',
+            leftSidebar: 'YOUR-LEFT-SIDEBAR-AD-UNIT-ID',
+            rightSidebar: 'YOUR-RIGHT-SIDEBAR-AD-UNIT-ID',
+            bottomBanner: 'YOUR-BOTTOM-BANNER-AD-UNIT-ID'
+        };
+    </script>
+
+    <style>
+        /* Modern Variables */
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #6366f1;
+            --primary-dark: #4338ca;
+            --secondary: #f8fafc;
+            --accent: #f59e0b;
+            --text-primary: #1f2937;
+            --text-secondary: #64748b;
+            --white: #ffffff;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --gradient-primary: linear-gradient(135deg, #4f46e5, #6366f1);
+            --gradient-accent: linear-gradient(135deg, #f59e0b, #fbbf24);
+            --gradient-success: linear-gradient(135deg, #10b981, #34d399);
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+            --radius: 12px;
+            --radius-lg: 16px;
+            --transition: all 0.3s ease;
+            --container-width: 1400px;
+            --header-height: 80px;
+            --border-width: 0px;
+            --border-color: #000000;
+            --border-style: solid;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            padding-top: var(--header-height);
+        }
+
+        /* Navigation */
+        .main-nav {
+            background: var(--white);
+            box-shadow: var(--shadow-lg);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            z-index: 1000;
+            border-bottom: 4px solid var(--primary);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .nav-container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: var(--transition);
+        }
+
+        .logo i {
+            color: #ff0000 !important;
+            background: none !important;
+            -webkit-background-clip: initial !important;
+            -webkit-text-fill-color: initial !important;
+            font-size: 2rem;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-menu a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: var(--transition);
+            transform: translateX(-50%);
+        }
+
+        .nav-menu a:hover::before {
+            width: 80%;
+        }
+
+        .nav-menu a.active {
+            background: var(--gradient-primary);
+            color: var(--white);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Tool Container */
+        .tool-container {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-xl);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        .tool-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .tool-header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tool-header p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        /* Features Grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--white);
+            border-radius: var(--radius);
+            transition: var(--transition);
+            border: 1px solid rgba(79, 70, 229, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 0;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature:hover::before {
+            opacity: 0.05;
+        }
+
+        .feature i {
+            font-size: 2.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            margin: 3rem 0;
+        }
+
+        .upload-container {
+            border: 3px dashed var(--primary-light);
+            border-radius: var(--radius-lg);
+            padding: 3rem;
+            text-align: center;
+            background: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .upload-container:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .upload-container:hover::before {
+            opacity: 0.05;
+        }
+
+        .upload-container.dragover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        /* Cropper Container */
+        .cropper-container {
+            max-width: 100%;
+            height: 500px;
+            margin: 2rem 0;
+            display: none;
+        }
+
+        .cropper-container.active {
+            display: block;
+        }
+
+        /* Live Preview Area */
+        .live-preview-section {
+            margin: 2rem 0;
+            display: none;
+        }
+
+        .live-preview-section.active {
+            display: block;
+        }
+
+        .live-preview-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .live-preview-original {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .live-preview-result {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .live-preview-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .live-preview-image {
+            width: 100%;
+            height: 300px;
+            background: var(--secondary);
+            border-radius: var(--radius);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .live-preview-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .live-preview-info {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--secondary);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Settings Section */
+        .settings-section {
+            margin: 2rem 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            width: 100%;
+            overflow-x: hidden;
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .setting-group {
+            background: var(--secondary);
+            padding: 0.8rem;
+            border-radius: var(--radius);
+            transition: var(--transition);
+            border: 1px solid rgba(79, 70, 229, 0.1);
+            position: relative;
+        }
+
+        .border-settings-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 300px;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            padding: 1rem;
+            z-index: 1000;
+            display: none;
+            margin-top: 0.5rem;
+        }
+
+        .setting-group:hover .border-settings-dropdown {
+            display: block;
+        }
+
+        .border-settings-dropdown::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 20px;
+            width: 16px;
+            height: 16px;
+            background: var(--white);
+            transform: rotate(45deg);
+            box-shadow: -2px -2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .border-settings-dropdown h4 {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .border-settings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+        }
+
+        .border-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--secondary);
+        }
+
+        .border-option:hover {
+            background: var(--primary-light);
+            color: var(--white);
+        }
+
+        .border-option i {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .border-option:hover i {
+            color: var(--white);
+        }
+
+        .border-option span {
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .border-settings-dropdown {
+                width: 250px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .border-settings-dropdown::before {
+                left: 50%;
+                transform: translateX(-50%) rotate(45deg);
+            }
+        }
+
+        .setting-group:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .setting-group label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+        }
+
+        .setting-group select, 
+        .setting-group input {
+            width: 100%;
+            padding: 0.4rem;
+            border: 1px solid var(--text-secondary);
+            border-radius: var(--radius);
+            background: var(--white);
+            color: var(--text-primary);
+            transition: var(--transition);
+            font-size: 0.85rem;
+        }
+
+        .setting-group select:focus, 
+        .setting-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+        }
+
+        .custom-size-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.4rem;
+        }
+
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding-right: 1.8rem;
+        }
+
+        .unit-display {
+            position: absolute;
+            right: 0.4rem;
+            color: var(--text-secondary);
+            pointer-events: none;
+            font-size: 0.75rem;
+        }
+
+        .preset-sizes {
+            transition: all 0.3s ease;
+        }
+
+        .crop-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .control-group {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            background: var(--secondary);
+            padding: 0.8rem;
+            border-radius: var(--radius);
+            border: 1px solid rgba(79, 70, 229, 0.1);
+        }
+
+        .control-group h4 {
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .control-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 0.4rem;
+        }
+
+        .crop-control-btn {
+            padding: 0.4rem;
+            border: none;
+            border-radius: var(--radius);
+            background: var(--white);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            font-size: 0.8rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .crop-control-btn:hover {
+            background: var(--primary-light);
+            color: var(--white);
+            transform: translateY(-1px);
+        }
+
+        .crop-control-btn i {
+            font-size: 0.9rem;
+        }
+
+        .rotation-control {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.4rem;
+            background: var(--white);
+            border-radius: var(--radius);
+        }
+
+        .rotation-control input[type="range"] {
+            flex: 1;
+            height: 4px;
+            -webkit-appearance: none;
+            background: var(--primary-light);
+            border-radius: 2px;
+            outline: none;
+        }
+
+        .rotation-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .rotation-control input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+
+        .rotation-control span {
+            min-width: 2.5rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-primary);
+        }
+
+        .fine-tuning-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .fine-tuning-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.4rem;
+            width: 100%;
+        }
+
+        .horizontal-controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.4rem;
+        }
+
+        .fine-tune-btn {
+            padding: 0.4rem;
+            border: none;
+            border-radius: var(--radius);
+            background: var(--white);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            font-size: 0.8rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .fine-tune-btn:hover {
+            background: var(--primary-light);
+            color: var(--white);
+            transform: translateY(-1px);
+        }
+
+        .fine-tune-btn i {
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .settings-section {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+                gap: 0.6rem;
+            }
+
+            .setting-group {
+                padding: 0.6rem;
+            }
+
+            .custom-size-inputs {
+                gap: 0.3rem;
+            }
+
+            .crop-controls,
+            .fine-tuning-controls {
+                padding: 0.8rem;
+                gap: 0.8rem;
+            }
+
+            .control-group {
+                min-width: 100%;
+                padding: 0.6rem;
+            }
+
+            .control-buttons {
+                grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            }
+
+            .fine-tuning-buttons,
+            .horizontal-controls {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .crop-control-btn,
+            .fine-tune-btn {
+                padding: 0.3rem;
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .settings-section {
+                padding: 0.8rem;
+            }
+
+            .setting-group {
+                padding: 0.5rem;
+            }
+
+            .setting-group label {
+                font-size: 0.8rem;
+            }
+
+            .setting-group select, 
+            .setting-group input {
+                font-size: 0.8rem;
+                padding: 0.3rem;
+            }
+
+            .crop-controls,
+            .fine-tuning-controls {
+                padding: 0.6rem;
+            }
+
+            .control-group {
+                padding: 0.5rem;
+            }
+
+            .control-group h4 {
+                font-size: 0.8rem;
+            }
+
+            .crop-control-btn,
+            .fine-tune-btn {
+                padding: 0.3rem;
+                font-size: 0.7rem;
+            }
+
+            .rotation-control {
+                padding: 0.3rem;
+            }
+
+            .rotation-control span {
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Preview Section */
+        .preview-section {
+            margin: 3rem 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .preview-card {
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+            background: var(--white);
+            padding: 1rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            transition: var(--transition);
+            border: 1px solid rgba(79, 70, 229, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .preview-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .preview-image-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: var(--secondary);
+        }
+
+        .preview-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: var(--radius);
+            transition: var(--transition);
+            max-width: 100%;
+        }
+
+        .preview-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .preview-info {
+            padding: 0.5rem;
+            background: var(--secondary);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .preview-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .preview-btn.download {
+            background: var(--gradient-primary);
+            color: var(--white);
+        }
+
+        .preview-btn.remove {
+            background: var(--white);
+            color: var(--error);
+            border: 1px solid var(--error);
+        }
+
+        .preview-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--white);
+            border: none;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--error);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            z-index: 1;
+        }
+
+        .remove-btn:hover {
+            transform: scale(1.1);
+            background: var(--error);
+            color: var(--white);
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: var(--transition);
+        }
+
+        .btn:hover::before {
+            transform: translateX(100%);
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--text-primary);
+            border: 1px solid var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* Ad Containers */
+        .ad-container {
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+            margin: 2rem 0;
+            text-align: center;
+            background: var(--white);
+            padding: 1rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .ad-sidebar {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 160px;
+            max-width: 160px;
+            overflow: hidden;
+            z-index: 100;
+        }
+
+        .ad-sidebar.left {
+            left: 1rem;
+        }
+
+        .ad-sidebar.right {
+            right: 1rem;
+        }
+
+        .ad-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+            background: var(--secondary);
+            border: 2px dashed var(--primary-light);
+            border-radius: var(--radius);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        /* Message Box */
+        .message-box {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem 2rem;
+            border-radius: var(--radius);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 1000;
+            animation: slideUp 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(10px);
+            max-width: 90%;
+            width: auto;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .message-box.success {
+            background: var(--gradient-success);
+        }
+
+        .message-box.error {
+            background: linear-gradient(135deg, #ef4444, #f87171);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translate(-50%, 100%);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .ad-sidebar {
+                display: none;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .tool-container {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 2rem;
+                word-wrap: break-word;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .upload-container {
+                padding: 2rem;
+            }
+
+            .settings-section {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .preview-section {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .preview-card img {
+                height: 180px;
+            }
+
+            .message-box {
+                width: 90%;
+                white-space: normal;
+                text-align: center;
+            }
+
+            .features {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .live-preview-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 0.5rem;
+            }
+
+            .tool-container {
+                padding: 1rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .nav-container {
+                padding: 0.5rem 1rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .feature {
+                padding: 1.2rem;
+            }
+
+            .feature i {
+                font-size: 2rem;
+            }
+
+            .setting-group {
+                padding: 1.2rem;
+            }
+
+            .preview-card {
+                padding: 0.8rem;
+            }
+
+            .preview-card img {
+                height: 180px;
+            }
+        }
+
+        /* Result Preview Area */
+        .result-preview {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            z-index: 1000;
+            max-width: 90%;
+            max-height: 90vh;
+            display: none;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .result-preview.active {
+            display: flex;
+        }
+
+        .result-preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--text-secondary);
+        }
+
+        .result-preview-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .result-preview-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .result-preview-close:hover {
+            color: var(--error);
+        }
+
+        .result-preview-content {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .result-preview-image {
+            flex: 1;
+            min-width: 300px;
+            max-width: 100%;
+            height: 400px;
+            background: var(--secondary);
+            border-radius: var(--radius);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-preview-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .result-preview-info {
+            flex: 1;
+            min-width: 300px;
+            padding: 1.5rem;
+            background: var(--secondary);
+            border-radius: var(--radius);
+        }
+
+        .result-preview-info h3 {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .result-preview-details {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .result-preview-detail {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem;
+            background: var(--white);
+            border-radius: var(--radius);
+        }
+
+        .result-preview-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            padding-top: 1rem;
+            border-top: 1px solid var(--text-secondary);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* New styles for cropper instructions */
+        .cropper-instructions {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            max-width: 250px;
+            backdrop-filter: blur(5px);
+        }
+
+        .instruction-content {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .instruction-content h4 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .instruction-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .instruction-content li {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .instruction-content li:before {
+            content: '•';
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .cropper-instructions {
+                position: static;
+                margin: 1rem auto;
+                max-width: 100%;
+            }
+        }
+
+        /* Border Controls Styles */
+        .border-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .border-templates {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 1rem;
+            background: var(--white);
+            border-radius: 0 0 var(--radius) var(--radius);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-light) var(--secondary);
+        }
+
+        .border-templates::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .border-templates::-webkit-scrollbar-track {
+            background: var(--secondary);
+            border-radius: 4px;
+        }
+
+        .border-templates::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 4px;
+        }
+
+        .border-templates::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        .border-template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 1rem;
+        }
+
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .border-section:hover .section-content {
+            max-height: 500px;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 768px) {
+            .border-templates {
+                max-height: 250px;
+            }
+            
+            .border-template-grid {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+                gap: 0.8rem;
+            }
+        }
+
+        .border-template-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            border: 1px solid var(--text-secondary);
+            border-radius: var(--radius);
+            background: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .border-template-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary);
+        }
+
+        .border-template-btn.active {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .template-preview {
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--text-secondary);
+            border-radius: var(--radius);
+            transition: var(--transition);
+            position: relative;
+            box-sizing: content-box;
+            background-color: var(--white);
+        }
+
+        .template-preview.classic {
+            border: 3px solid #000;
+            box-sizing: border-box;
+        }
+
+        .template-preview.modern {
+            border: 2px solid #4f46e5;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+            box-sizing: border-box;
+        }
+
+        .template-preview.vintage {
+            border: 4px double #8b4513;
+            box-sizing: border-box;
+        }
+
+        .template-preview.minimal {
+            border: 1px solid #64748b;
+            box-sizing: border-box;
+        }
+
+        .template-preview.double {
+            border: 2px solid #000;
+            box-shadow: 0 0 0 1px #fff, 0 0 0 3px #000;
+            box-sizing: border-box;
+        }
+
+        .template-preview.dashed {
+            border: 2px dashed #4f46e5;
+            box-sizing: border-box;
+        }
+
+        .template-preview.custom {
+            border: 2px dashed var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            box-sizing: border-box;
+        }
+
+        .template-preview.custom i {
+            font-size: 1.5rem;
+        }
+
+        .border-template-btn:hover .template-preview.custom {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .border-controller {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background: var(--secondary);
+            padding: 1rem;
+            border-radius: var(--radius);
+            border: 1px solid rgba(79, 70, 229, 0.1);
+        }
+
+        .border-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .border-input-group label {
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .border-input-group input,
+        .border-input-group select {
+            padding: 0.5rem;
+            border: 1px solid var(--text-secondary);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            background: var(--white);
+        }
+
+        .border-input-group input[type="color"] {
+            height: 40px;
+            padding: 0.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .border-controls {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .border-templates,
+            .border-controller {
+                padding: 0.8rem;
+            }
+
+            .border-template-grid {
+                grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+                gap: 0.8rem;
+            }
+
+            .template-preview {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        .border-properties-panel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            z-index: 1000;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            width: 600px;
+        }
+
+        .border-properties-panel.active {
+            display: block;
+        }
+
+        .border-properties-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--text-secondary);
+        }
+
+        .border-properties-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .border-properties-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .border-properties-close:hover {
+            color: var(--error);
+        }
+
+        .border-properties-content {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .border-property-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .border-property-group label {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .border-property-group input,
+        .border-property-group select {
+            padding: 0.5rem;
+            border: 1px solid var(--text-secondary);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+        }
+
+        .border-property-group input[type="color"] {
+            height: 40px;
+            padding: 0.2rem;
+        }
+
+        .border-property-group input[type="range"] {
+            width: 100%;
+        }
+
+        .border-preview-box {
+            grid-column: 1 / -1;
+            height: 200px;
+            background: var(--white);
+            border: 1px solid var(--text-secondary);
+            border-radius: var(--radius);
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .border-preview-image {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+        }
+
+        .border-properties-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .border-properties-panel {
+                width: 95%;
+                padding: 1rem;
+            }
+
+            .border-properties-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Border Settings Styles */
+        .border-settings {
+            overflow: visible !important;
+        }
+
+        .border-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .border-section {
+            background: var(--secondary);
+            border-radius: var(--radius);
+            border: 1px solid rgba(79, 70, 229, 0.1);
+            overflow: hidden;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(79, 70, 229, 0.1);
+            user-select: none;
+        }
+
+        .section-header:hover {
+            background: var(--secondary);
+        }
+
+        .section-header:hover .dropdown-arrow {
+            transform: rotate(180deg);
+            background: var(--primary-light);
+            color: var(--white);
+        }
+
+        .border-templates {
+            padding: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-light) var(--secondary);
+            background: var(--white);
+            border-radius: 0 0 var(--radius) var(--radius);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .border-templates::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .border-templates::-webkit-scrollbar-track {
+            background: var(--secondary);
+            border-radius: 4px;
+        }
+
+        .border-templates::-webkit-scrollbar-thumb {
+            background-color: var(--primary-light);
+            border-radius: 4px;
+            border: 2px solid var(--secondary);
+        }
+
+        .border-templates::-webkit-scrollbar-thumb:hover {
+            background-color: var(--primary);
+        }
+
+        .border-template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+            padding-right: 0.5rem;
+        }
+
+        .border-template-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            border: 1px solid var(--text-secondary);
+            border-radius: var(--radius);
+            background: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+            min-width: 90px;
+        }
+
+        .border-template-btn span {
+            font-size: 0.85rem;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .border-templates {
+                max-height: 250px;
+            }
+
+            .border-template-grid {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+                gap: 0.8rem;
+            }
+
+            .border-template-btn {
+                padding: 0.6rem;
+                min-width: 70px;
+            }
+
+            .border-template-btn span {
+                font-size: 0.8rem;
+            }
+        }
+
+        .border-controller {
+            padding: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .border-sections {
+                gap: 0.8rem;
+            }
+
+            .section-header {
+                padding: 0.8rem;
+            }
+
+            .border-templates,
+            .border-controller {
+                padding: 0.8rem;
+            }
+        }
+
+        /* Border Template Styles */
+        .template-preview.elegant {
+            border: 2px solid #000;
+            box-shadow: 0 0 0 2px #fff, 0 0 0 4px #000;
+            background-color: var(--white);
+        }
+
+        .template-preview.fancy {
+            border: 3px solid gold;
+            border-image: linear-gradient(45deg, gold, #ffd700) 1;
+            background-color: var(--white);
+        }
+
+        .template-preview.retro {
+            border: 4px solid #8b4513;
+            box-shadow: inset 0 0 10px rgba(139, 69, 19, 0.3);
+            background-color: #fdf5e6;
+        }
+
+        .template-preview.shadow {
+            border: 1px solid #ddd;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            background-color: var(--white);
+        }
+
+        .template-preview.gradient {
+            border: 4px solid transparent;
+            border-image: linear-gradient(45deg, #ff6b6b, #4ecdc4) 1;
+            background-color: var(--white);
+        }
+
+        .template-preview.polaroid {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Live Preview Border Styles */
+        .live-preview-image.preview-image-container {
+            position: relative;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .live-preview-image.preview-image-container.with-border {
+            padding: calc(var(--border-width) * 1px);
+        }
+
+        .live-preview-image.preview-image-container.with-border.border-inside img {
+            border: calc(var(--border-width) * 1px) var(--border-style) var(--border-color);
+        }
+
+        .live-preview-image.preview-image-container.with-border.border-outside {
+            border: calc(var(--border-width) * 1px) var(--border-style) var(--border-color);
+        }
+
+        .live-preview-image.preview-image-container.with-border.border-center {
+            border: calc(var(--border-width) * 0.5px) var(--border-style) var(--border-color);
+        }
+
+        /* Update border info in preview */
+        .live-preview-info {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        #previewBorder {
+            color: var(--primary);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-crop"></i>
+                Image Cropper
+            </a>
+            <div class="nav-menu">
+                <a href="/" class="active">Home</a>
+                <a href="/image-tools">Image Tools</a>
+                <a href="/pdf-tools">PDF Tools</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- Top Ad Banner -->
+        <div class="ad-container">
+            <div class="ad-placeholder" id="topBannerAd">
+                <div>
+                    <i class="fas fa-ad"></i><br>
+                    Top Banner Ad
+                </div>
+            </div>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({
+                    google_ad_client: ADSENSE_CONFIG.topBanner,
+                    enable_page_level_ads: true
+                });
+            </script>
+        </div>
+
+        <!-- Left Sidebar Ad -->
+        <aside class="ad-sidebar left">
+            <div class="ad-container">
+                <div class="ad-placeholder" id="leftSidebarAd">
+                    <div>
+                        <i class="fas fa-ad"></i><br>
+                        Left Sidebar Ad
+                    </div>
+                </div>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({
+                        google_ad_client: ADSENSE_CONFIG.leftSidebar,
+                        enable_page_level_ads: true
+                    });
+                </script>
+            </div>
+        </aside>
+
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>Image Cropper</h1>
+                <p>Crop, resize, and optimize your images with custom settings</p>
+                
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-file-image"></i>
+                        <span>Multiple Formats<br>JPG, JPEG, PNG</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-compress-arrows-alt"></i>
+                        <span>Custom Image Size<br>HD, Full HD, etc.</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>Quality Control<br>Up to 100%</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-file-upload"></i>
+                        <span>Up to 100MB<br>File Size</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="upload-section">
+                <div class="upload-container" id="dropZone">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <h3>Drop your image here or click to browse</h3>
+                    <p>Supported formats: JPG, JPEG, PNG (Max: 100MB)</p>
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                </div>
+            </div>
+
+            <div class="cropper-container" id="cropperContainer">
+                <img id="cropperImage" src="" alt="Image to crop">
+            </div>
+
+            <div class="live-preview-section" id="livePreviewSection">
+                <h3 class="live-preview-title">
+                    <i class="fas fa-eye"></i>
+                    Live Preview
+                </h3>
+                <div class="live-preview-container">
+                    <div class="live-preview-original">
+                        <h4 class="live-preview-title">
+                            <i class="fas fa-image"></i>
+                            Original Image
+                        </h4>
+                        <div class="live-preview-image">
+                            <img id="originalPreview" src="" alt="Original image">
+                        </div>
+                    </div>
+                    <div class="live-preview-result">
+                        <h4 class="live-preview-title">
+                            <i class="fas fa-crop"></i>
+                            Crop Preview
+                        </h4>
+                        <div class="live-preview-image preview-image-container">
+                            <img id="cropPreview" src="" alt="Crop preview">
+                        </div>
+                        <div class="live-preview-info">
+                            <div>Format: <span id="previewFormat"></span></div>
+                            <div>Quality: <span id="previewQuality"></span></div>
+                            <div>Size: <span id="previewSize"></span></div>
+                            <div>Dimensions: <span id="previewDimensions"></span></div>
+                            <div>Border: <span id="previewBorder"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="setting-group">
+                    <label for="imageFormat">Image Format</label>
+                    <select id="imageFormat">
+                        <option value="jpeg">JPEG</option>
+                        <option value="jpg">JPG</option>
+                        <option value="png">PNG</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label for="measurementUnit">Measurement Unit</label>
+                    <select id="measurementUnit">
+                        <option value="px">Pixels (px)</option>
+                        <option value="mm">Millimeters (mm)</option>
+                        <option value="cm">Centimeters (cm)</option>
+                        <option value="inch">Inches (in)</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label for="imageSize">Image Size</label>
+                    <select id="imageSize">
+                        <option value="original">Original Size</option>
+                        <option value="hd">HD (1280x720)</option>
+                        <option value="fullhd">Full HD (1920x1080)</option>
+                        <option value="4k">4K (3840x2160)</option>
+                        <option value="custom">Custom Size</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label for="imageQuality">Image Quality</label>
+                    <select id="imageQuality">
+                        <option value="high">High Quality (Large file size)</option>
+                        <option value="medium" selected>Medium Quality (Recommended)</option>
+                        <option value="low">Low Quality (Small file size)</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label for="aspectRatio">Aspect Ratio</label>
+                    <select id="aspectRatio">
+                        <option value="free">Free</option>
+                        <option value="1:1">1:1 (Square)</option>
+                        <option value="16:9">16:9 (Widescreen)</option>
+                        <option value="4:3">4:3 (Standard)</option>
+                        <option value="3:4">3:4 (Portrait)</option>
+                        <option value="9:16">9:16 (Mobile)</option>
+                        <option value="35:45">35:45 (Passport Size)</option>
+                    </select>
+                </div>
+                <div class="setting-group custom-size-group">
+                    <label>Custom Size</label>
+                    <div class="custom-size-inputs">
+                        <div class="input-group">
+                            <input type="number" id="customWidth" placeholder="Width">
+                            <span class="unit-display">px</span>
+                        </div>
+                        <div class="input-group">
+                            <input type="number" id="customHeight" placeholder="Height">
+                            <span class="unit-display">px</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <label for="cropMode">Crop Mode</label>
+                    <select id="cropMode">
+                        <option value="free">Free Crop</option>
+                        <option value="fixed">Fixed Size</option>
+                        <option value="preset">Preset Sizes</option>
+                    </select>
+                </div>
+                <div class="setting-group preset-sizes">
+                    <label>Preset Sizes</label>
+                    <select id="presetSize">
+                        <option value="passport">Passport Photo (35x45mm)</option>
+                        <option value="id">ID Card (85x54mm)</option>
+                        <option value="a4">A4 (210x297mm)</option>
+                        <option value="business">Business Card (85x55mm)</option>
+                        <option value="4x6">4x6 inches (102x152mm)</option>
+                        <option value="5x7">5x7 inches (127x178mm)</option>
+                        <option value="8x10">8x10 inches (203x254mm)</option>
+                        <option value="letter">US Letter (216x279mm)</option>
+                        <option value="instagram">Instagram Post (1080x1080px)</option>
+                        <option value="facebook">Facebook Cover (851x315px)</option>
+                        <option value="twitter">Twitter Header (1500x500px)</option>
+                        <option value="youtube">YouTube Thumbnail (1280x720px)</option>
+                    </select>
+                </div>
+                <div class="setting-group border-settings">
+                    <label>Border Settings</label>
+                    <div class="border-sections">
+                        <div class="border-section">
+                            <div class="section-header">
+                                <span>Border Templates</span>
+                                <i class="fas fa-chevron-down dropdown-arrow"></i>
+                            </div>
+                            <div class="section-content">
+                                <div class="border-templates">
+                                    <div class="border-template-grid">
+                                        <button class="border-template-btn" data-template="classic">
+                                            <div class="template-preview classic"></div>
+                                            <span>Classic</span>
+                                        </button>
+                                        <button class="border-template-btn" data-template="modern">
+                                            <div class="template-preview modern"></div>
+                                            <span>Modern</span>
+                                        </button>
+                                        <button class="border-template-btn" data-template="vintage">
+                                            <div class="template-preview vintage"></div>
+                                            <span>Vintage</span>
+                                        </button>
+                                        <button class="border-template-btn" data-template="minimal">
+                                            <div class="template-preview minimal"></div>
+                                            <span>Minimal</span>
+                                        </button>
+                                        <button class="border-template-btn" data-template="double">
+                                            <div class="template-preview double"></div>
+                                            <span>Double</span>
+                                        </button>
+                                        <button class="border-template-btn" data-template="dashed">
+                                            <div class="template-preview dashed"></div>
+                                            <span>Dashed</span>
+                                        </button>
+                                        <button class="border-template-btn" data-template="elegant">
+                                            <div class="template-preview elegant"></div>
+                                            <span>Elegant</span>
+                                        </button>
+                                        <button class="border-template-btn" data-template="fancy">
+                                            <div class="template-preview fancy"></div>
+                                            <span>Fancy</span>
+                                        </button>
+                                        <button class="border-template-btn" data-template="retro">
+                                            <div class="template-preview retro"></div>
+                                            <span>Retro</span>
+                                        </button>
+                                        <button class="border-template-btn" data-template="shadow">
+                                            <div class="template-preview shadow"></div>
+                                            <span>Shadow</span>
+                                        </button>
+                                        <button class="border-template-btn" data-template="gradient">
+                                            <div class="template-preview gradient"></div>
+                                            <span>Gradient</span>
+                                        </button>
+                                        <button class="border-template-btn" data-template="polaroid">
+                                            <div class="template-preview polaroid"></div>
+                                            <span>Polaroid</span>
+                                        </button>
+                                        <button class="border-template-btn custom-border">
+                                            <div class="template-preview custom">
+                                                <i class="fas fa-upload"></i>
+                                            </div>
+                                            <span>Custom</span>
+                                            <input type="file" id="customBorderInput" accept="image/*" style="display: none;">
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border-section">
+                            <div class="section-header">
+                                <span>Border Properties</span>
+                                <i class="fas fa-chevron-down dropdown-arrow"></i>
+                            </div>
+                            <div class="section-content border-controller">
+                                <div class="border-input-group">
+                                    <label for="borderWidth">Width (px)</label>
+                                    <input type="number" id="borderWidth" min="0" max="100" value="0">
+                                </div>
+                                <div class="border-input-group">
+                                    <label for="borderColor">Color</label>
+                                    <input type="color" id="borderColor" value="#000000">
+                                </div>
+                                <div class="border-input-group">
+                                    <label for="borderStyle">Style</label>
+                                    <select id="borderStyle">
+                                        <option value="solid">Solid</option>
+                                        <option value="dashed">Dashed</option>
+                                        <option value="dotted">Dotted</option>
+                                        <option value="double">Double</option>
+                                    </select>
+                                </div>
+                                <div class="border-input-group">
+                                    <label for="borderPosition">Position</label>
+                                    <select id="borderPosition">
+                                        <option value="inside">Inside</option>
+                                        <option value="outside">Outside</option>
+                                        <option value="center">Center</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="crop-controls">
+                <div class="control-group">
+                    <h4>Basic Controls</h4>
+                    <div class="control-buttons">
+                        <button class="crop-control-btn" id="zoomInBtn">
+                            <i class="fas fa-search-plus"></i>
+                            Zoom In
+                        </button>
+                        <button class="crop-control-btn" id="zoomOutBtn">
+                            <i class="fas fa-search-minus"></i>
+                            Zoom Out
+                        </button>
+                        <button class="crop-control-btn" id="rotateLeftBtn">
+                            <i class="fas fa-undo"></i>
+                            Rotate Left
+                        </button>
+                        <button class="crop-control-btn" id="rotateRightBtn">
+                            <i class="fas fa-redo"></i>
+                            Rotate Right
+                        </button>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <h4>Rotation Control</h4>
+                    <div class="rotation-control">
+                        <input type="range" id="rotationSlider" min="0" max="360" value="0" step="1">
+                        <span id="rotationValue">0°</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <h4>Flip Controls</h4>
+                    <div class="control-buttons">
+                        <button class="crop-control-btn" id="flipHBtn">
+                            <i class="fas fa-arrows-alt-h"></i>
+                            Flip H
+                        </button>
+                        <button class="crop-control-btn" id="flipVBtn">
+                            <i class="fas fa-arrows-alt-v"></i>
+                            Flip V
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fine-tuning controls -->
+            <div class="fine-tuning-controls">
+                <div class="control-group">
+                    <h4>Position Control</h4>
+                    <div class="fine-tuning-buttons">
+                        <button class="fine-tune-btn" id="moveUpBtn">
+                            <i class="fas fa-arrow-up"></i>
+                            Up
+                        </button>
+                        <div class="horizontal-controls">
+                            <button class="fine-tune-btn" id="moveLeftBtn">
+                                <i class="fas fa-arrow-left"></i>
+                                Left
+                            </button>
+                            <button class="fine-tune-btn" id="moveRightBtn">
+                                <i class="fas fa-arrow-right"></i>
+                                Right
+                            </button>
+                        </div>
+                        <button class="fine-tune-btn" id="moveDownBtn">
+                            <i class="fas fa-arrow-down"></i>
+                            Down
+                        </button>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <h4>Size Control</h4>
+                    <div class="fine-tuning-buttons">
+                        <button class="fine-tune-btn" id="expandUpBtn">
+                            <i class="fas fa-expand-arrows-alt"></i>
+                            Expand Up
+                        </button>
+                        <div class="horizontal-controls">
+                            <button class="fine-tune-btn" id="expandLeftBtn">
+                                <i class="fas fa-expand-arrows-alt"></i>
+                                Expand Left
+                            </button>
+                            <button class="fine-tune-btn" id="expandRightBtn">
+                                <i class="fas fa-expand-arrows-alt"></i>
+                                Expand Right
+                            </button>
+                        </div>
+                        <button class="fine-tune-btn" id="expandDownBtn">
+                            <i class="fas fa-expand-arrows-alt"></i>
+                            Expand Down
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-section" id="previewSection">
+                <!-- Preview cards will be added here dynamically -->
+            </div>
+
+            <div class="button-group">
+                <button id="cropBtn" class="btn btn-primary" disabled>
+                    <i class="fas fa-crop"></i>
+                    Crop Image
+                </button>
+                <button id="clearBtn" class="btn btn-secondary" disabled>
+                    <i class="fas fa-trash"></i>
+                    Clear All
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Sidebar Ad -->
+        <aside class="ad-sidebar right">
+            <div class="ad-container">
+                <div class="ad-placeholder" id="rightSidebarAd">
+                    <div>
+                        <i class="fas fa-ad"></i><br>
+                        Right Sidebar Ad
+                    </div>
+                </div>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({
+                        google_ad_client: ADSENSE_CONFIG.rightSidebar,
+                        enable_page_level_ads: true
+                    });
+                </script>
+            </div>
+        </aside>
+
+        <!-- Bottom Ad Banner -->
+        <div class="ad-container">
+            <div class="ad-placeholder" id="bottomBannerAd">
+                <div>
+                    <i class="fas fa-ad"></i><br>
+                    Bottom Banner Ad
+                </div>
+            </div>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({
+                    google_ad_client: ADSENSE_CONFIG.bottomBanner,
+                    enable_page_level_ads: true
+                });
+            </script>
+        </div>
+    </main>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="result-preview" id="resultPreview">
+        <div class="result-preview-header">
+            <h2 class="result-preview-title">Cropped Image Preview</h2>
+            <button class="result-preview-close" onclick="closeResultPreview()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="result-preview-content">
+            <div class="result-preview-image">
+                <img id="resultImage" src="" alt="Cropped result">
+            </div>
+            <div class="result-preview-info">
+                <h3>Image Details</h3>
+                <div class="result-preview-details">
+                    <div class="result-preview-detail">
+                        <span>Format:</span>
+                        <span id="resultFormat"></span>
+                    </div>
+                    <div class="result-preview-detail">
+                        <span>Quality:</span>
+                        <span id="resultQuality"></span>
+                    </div>
+                    <div class="result-preview-detail">
+                        <span>Size:</span>
+                        <span id="resultSize"></span>
+                    </div>
+                    <div class="result-preview-detail">
+                        <span>Dimensions:</span>
+                        <span id="resultDimensions"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="result-preview-actions">
+            <button class="btn btn-secondary" onclick="closeResultPreview()">
+                <i class="fas fa-times"></i>
+                Close
+            </button>
+            <button class="btn btn-primary" onclick="downloadResult()">
+                <i class="fas fa-download"></i>
+                Download
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Constants
+        const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
+        const SUPPORTED_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
+        
+        // DOM Elements
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const cropperContainer = document.getElementById('cropperContainer');
+        const cropperImage = document.getElementById('cropperImage');
+        const previewSection = document.getElementById('previewSection');
+        const cropBtn = document.getElementById('cropBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const imageFormat = document.getElementById('imageFormat');
+        const imageSize = document.getElementById('imageSize');
+        const imageQuality = document.getElementById('imageQuality');
+        const aspectRatio = document.getElementById('aspectRatio');
+        const customWidth = document.getElementById('customWidth');
+        const customHeight = document.getElementById('customHeight');
+        const measurementUnit = document.getElementById('measurementUnit');
+        const cropMode = document.getElementById('cropMode');
+        const presetSize = document.getElementById('presetSize');
+        const presetSizesGroup = document.querySelector('.preset-sizes');
+        const customSizeGroup = document.querySelector('.custom-size-group');
+        const borderWidth = document.getElementById('borderWidth');
+        const borderColor = document.getElementById('borderColor');
+        const borderStyle = document.getElementById('borderStyle');
+        const borderPosition = document.getElementById('borderPosition');
+
+        // State
+        let selectedFile = null;
+        let cropper = null;
+
+        // Event Listeners
+        dropZone.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', handleFileSelect);
+        cropBtn.addEventListener('click', cropImage);
+        clearBtn.addEventListener('click', clearAll);
+        imageSize.addEventListener('change', handleImageSizeChange);
+        aspectRatio.addEventListener('change', handleAspectRatioChange);
+        cropMode.addEventListener('change', handleCropModeChange);
+        measurementUnit.addEventListener('change', handleMeasurementUnitChange);
+        presetSize.addEventListener('change', handlePresetSizeChange);
+
+        // Drag and Drop
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFiles(Array.from(e.dataTransfer.files));
+        });
+
+        // File Handling Functions
+        function handleFileSelect(e) {
+            handleFiles(Array.from(e.target.files));
+        }
+
+        function handleFiles(files) {
+            if (files.length === 0) return;
+
+            const file = files[0];
+            if (!SUPPORTED_TYPES.includes(file.type)) {
+                showMessage('Please select a valid image file (JPG, JPEG, or PNG)', 'error');
+                return;
+            }
+
+            if (file.size > MAX_FILE_SIZE) {
+                showMessage('File size exceeds the 100MB limit', 'error');
+                return;
+            }
+
+            selectedFile = file;
+            loadImage(file);
+            updateButtons();
+            showMessage('Image loaded successfully', 'success');
+        }
+
+        function loadImage(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                cropperImage.src = e.target.result;
+                cropperContainer.classList.add('active');
+                initializeCropper();
+                updateLivePreview();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function initializeCropper() {
+            if (cropper) {
+                cropper.destroy();
+            }
+
+            const aspectRatioValue = getAspectRatioValue();
+            cropper = new Cropper(cropperImage, {
+                aspectRatio: aspectRatioValue,
+                viewMode: 1,
+                dragMode: 'crop',
+                autoCropArea: 0.8,
+                restore: false,
+                guides: true,
+                center: true,
+                highlight: true,
+                cropBoxMovable: true,
+                cropBoxResizable: true,
+                toggleDragModeOnDblclick: true,
+                responsive: true,
+                minContainerWidth: 200,
+                minContainerHeight: 200,
+                background: true,
+                modal: true,
+                zoomable: true,
+                scalable: true,
+                rotatable: true,
+                checkCrossOrigin: true,
+                checkOrientation: true,
+                showDots: true,
+                showHandles: true,
+                showGrid: true,
+                showBackground: true,
+                showCrosshair: true,
+                showTooltip: true,
+                showZoomer: true,
+                showRotator: true,
+                showScaler: true,
+                showCropper: true,
+                showCropBox: true,
+                showCropBoxResize: true,
+                showCropBoxMove: true,
+                showCropBoxRotate: true,
+                showCropBoxScale: true,
+                showCropBoxZoom: true,
+                showCropBoxPreview: true,
+                showCropBoxOverlay: true,
+                showCropBoxBackground: true,
+                showCropBoxBorder: true,
+                showCropBoxGrid: true,
+                showCropBoxGuides: true,
+                showCropBoxCenter: true,
+                showCropBoxHighlight: true,
+                showCropBoxModal: true,
+                showCropBoxResponsive: true,
+                showCropBoxRestore: true,
+                showCropBoxToggle: true,
+                showCropBoxDoubleClick: true,
+                showCropBoxKeyboard: true,
+                showCropBoxTouch: true,
+                showCropBoxWheel: true,
+                showCropBoxGesture: true,
+                showCropBoxTouchDrag: true,
+                showCropBoxTouchZoom: true,
+                showCropBoxTouchRotate: true,
+                showCropBoxTouchScale: true,
+                showCropBoxTouchMove: true,
+                showCropBoxTouchResize: true,
+                showCropBoxTouchCenter: true,
+                showCropBoxTouchHighlight: true,
+                showCropBoxTouchModal: true,
+                showCropBoxTouchResponsive: true,
+                showCropBoxTouchRestore: true,
+                showCropBoxTouchToggle: true,
+                showCropBoxTouchDoubleClick: true,
+                showCropBoxTouchKeyboard: true,
+                showCropBoxTouchWheel: true,
+                showCropBoxTouchGesture: true,
+                crop: function() {
+                    updateLivePreview();
+                },
+                ready: function() {
+                    const instructions = document.createElement('div');
+                    instructions.className = 'cropper-instructions';
+                    instructions.innerHTML = `
+                        <div class="instruction-content">
+                            <h4>How to Crop</h4>
+                            <ul>
+                                <li>Click and drag to select an area</li>
+                                <li>Use handles to resize the selection</li>
+                                <li>Double-click to toggle between crop/move mode</li>
+                                <li>Use arrow keys for precise adjustments</li>
+                            </ul>
+                        </div>
+                    `;
+                    cropperContainer.appendChild(instructions);
+
+                    // Update rotation slider when cropper is ready
+                    const currentRotation = cropper.getData().rotate || 0;
+                    rotationSlider.value = currentRotation;
+                    rotationValue.textContent = `${currentRotation}°`;
+                }
+            });
+        }
+
+        function getAspectRatioValue() {
+            const ratio = aspectRatio.value;
+            switch (ratio) {
+                case '1:1': return 1;
+                case '16:9': return 16 / 9;
+                case '4:3': return 4 / 3;
+                case '3:4': return 3 / 4;
+                case '9:16': return 9 / 16;
+                case '35:45': return 35 / 45; // Passport size ratio
+                default: return NaN; // Free aspect ratio
+            }
+        }
+
+        function handleAspectRatioChange() {
+            if (cropper) {
+                const ratio = getAspectRatioValue();
+                cropper.setAspectRatio(ratio);
+            }
+        }
+
+        function handleImageSizeChange() {
+            if (imageSize.value === 'custom') {
+                customWidth.disabled = false;
+                customHeight.disabled = false;
+            } else {
+                customWidth.disabled = true;
+                customHeight.disabled = true;
+            }
+        }
+
+        async function cropImage() {
+            try {
+                cropBtn.disabled = true;
+                showMessage('Processing image...', 'success');
+
+                const format = imageFormat.value;
+                const quality = getQualityValue();
+                
+                const cropData = cropper.getData();
+                const canvas = cropper.getCroppedCanvas({
+                    width: Math.round(cropData.width),
+                    height: Math.round(cropData.height)
+                });
+
+                // Apply border if width > 0
+                const borderWidthValue = parseInt(borderWidth.value);
+                if (borderWidthValue > 0) {
+                    const ctx = canvas.getContext('2d');
+                    const tempCanvas = document.createElement('canvas');
+                    const tempCtx = tempCanvas.getContext('2d');
+                    
+                    // Calculate dimensions based on border position
+                    let finalWidth = cropData.width;
+                    let finalHeight = cropData.height;
+                    let imageX = 0;
+                    let imageY = 0;
+                    
+                    switch (borderPosition.value) {
+                        case 'inside':
+                            finalWidth = cropData.width;
+                            finalHeight = cropData.height;
+                            imageX = borderWidthValue;
+                            imageY = borderWidthValue;
+                            break;
+                        case 'outside':
+                            finalWidth = cropData.width + (borderWidthValue * 2);
+                            finalHeight = cropData.height + (borderWidthValue * 2);
+                            imageX = borderWidthValue;
+                            imageY = borderWidthValue;
+                            break;
+                        case 'center':
+                            finalWidth = cropData.width + borderWidthValue;
+                            finalHeight = cropData.height + borderWidthValue;
+                            imageX = borderWidthValue / 2;
+                            imageY = borderWidthValue / 2;
+                            break;
+                    }
+                    
+                    // Set canvas dimensions
+                    tempCanvas.width = finalWidth;
+                    tempCanvas.height = finalHeight;
+                    
+                    // Fill background
+                    tempCtx.fillStyle = '#ffffff';
+                    tempCtx.fillRect(0, 0, finalWidth, finalHeight);
+                    
+                    // Draw image first
+                    tempCtx.drawImage(canvas, imageX, imageY);
+                    
+                    // Draw border
+                    tempCtx.strokeStyle = borderColor.value;
+                    tempCtx.lineWidth = borderWidthValue;
+                    
+                    if (borderStyle.value === 'double') {
+                        // Draw outer border
+                        tempCtx.strokeRect(borderWidthValue/2, borderWidthValue/2, 
+                                        finalWidth - borderWidthValue, 
+                                        finalHeight - borderWidthValue);
+                        
+                        // Draw inner border
+                        const spacing = Math.max(1, borderWidthValue / 3);
+                        tempCtx.strokeRect(borderWidthValue/2 + spacing, 
+                                        borderWidthValue/2 + spacing,
+                                        finalWidth - borderWidthValue - spacing * 2, 
+                                        finalHeight - borderWidthValue - spacing * 2);
+                    } else {
+                        // Set line style
+                        if (borderStyle.value === 'dashed') {
+                            tempCtx.setLineDash([borderWidthValue * 2, borderWidthValue]);
+                        } else if (borderStyle.value === 'dotted') {
+                            tempCtx.setLineDash([borderWidthValue, borderWidthValue]);
+                        }
+                        
+                        // Draw border path
+                        tempCtx.beginPath();
+                        // Top border
+                        tempCtx.moveTo(borderWidthValue/2, borderWidthValue/2);
+                        tempCtx.lineTo(finalWidth - borderWidthValue/2, borderWidthValue/2);
+                        // Right border
+                        tempCtx.moveTo(finalWidth - borderWidthValue/2, borderWidthValue/2);
+                        tempCtx.lineTo(finalWidth - borderWidthValue/2, finalHeight - borderWidthValue/2);
+                        // Bottom border
+                        tempCtx.moveTo(finalWidth - borderWidthValue/2, finalHeight - borderWidthValue/2);
+                        tempCtx.lineTo(borderWidthValue/2, finalHeight - borderWidthValue/2);
+                        // Left border
+                        tempCtx.moveTo(borderWidthValue/2, finalHeight - borderWidthValue/2);
+                        tempCtx.lineTo(borderWidthValue/2, borderWidthValue/2);
+                        
+                        tempCtx.stroke();
+                    }
+                    
+                    // Replace original canvas
+                    canvas.width = finalWidth;
+                    canvas.height = finalHeight;
+                    ctx.drawImage(tempCanvas, 0, 0);
+                }
+
+                const blob = await new Promise(resolve => {
+                    canvas.toBlob(resolve, `image/${format}`, quality);
+                });
+
+                const url = URL.createObjectURL(blob);
+                showResultPreview(url, format, imageQuality.value, 'Custom', 
+                                Math.round(canvas.width), Math.round(canvas.height));
+                addPreview(url);
+
+                showMessage('Image cropped successfully!', 'success');
+            } catch (error) {
+                console.error(error);
+                showMessage('Error cropping image. Please try again.', 'error');
+            } finally {
+                cropBtn.disabled = false;
+            }
+        }
+
+        function getQualityValue() {
+            switch (imageQuality.value) {
+                case 'high': return 1.0;    // Maximum quality
+                case 'low': return 0.4;     // More compression
+                default: return 0.7;        // Balanced quality
+            }
+        }
+
+        function getImageDimensions() {
+            const unit = measurementUnit.value;
+            const dpi = 96; // Standard DPI
+
+            if (imageSize.value === 'custom') {
+                let width = parseFloat(customWidth.value);
+                let height = parseFloat(customHeight.value);
+
+                // Convert to pixels if needed
+                if (unit !== 'px') {
+                    width = Math.round((width * dpi) / 25.4);
+                    height = Math.round((height * dpi) / 25.4);
+                }
+
+                return {
+                    width: width || 1920,
+                    height: height || 1080
+                };
+            }
+
+            // Rest of the function remains the same
+            switch (imageSize.value) {
+                case 'hd': return { width: 1280, height: 720 };
+                case 'fullhd': return { width: 1920, height: 1080 };
+                case '4k': return { width: 3840, height: 2160 };
+                default: return { width: 1920, height: 1080 };
+            }
+        }
+
+        function addPreview(url) {
+            const card = document.createElement('div');
+            card.className = 'preview-card';
+            const timestamp = new Date().toLocaleTimeString();
+            card.innerHTML = `
+                <div class="preview-image-container">
+                    <img src="${url}" alt="Cropped image">
+                    <button class="remove-btn" onclick="this.closest('.preview-card').remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="preview-info">
+                    <div>Format: ${imageFormat.value.toUpperCase()}</div>
+                    <div>Quality: ${imageQuality.value}</div>
+                    <div>Size: ${imageSize.value}</div>
+                    <div>Time: ${timestamp}</div>
+                </div>
+                <div class="preview-actions">
+                    <button class="preview-btn download" onclick="downloadPreview(this)">
+                        <i class="fas fa-download"></i>
+                        Download
+                    </button>
+                    <button class="preview-btn remove" onclick="this.closest('.preview-card').remove()">
+                        <i class="fas fa-trash"></i>
+                        Remove
+                    </button>
+                </div>
+            `;
+            previewSection.appendChild(card);
+        }
+
+        function downloadPreview(button) {
+            const card = button.closest('.preview-card');
+            const img = card.querySelector('img');
+            const link = document.createElement('a');
+            link.href = img.src;
+            link.download = `cropped-image-${new Date().getTime()}.${imageFormat.value}`;
+            link.click();
+        }
+
+        function clearAll() {
+            selectedFile = null;
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+            cropperContainer.classList.remove('active');
+            document.getElementById('livePreviewSection').classList.remove('active');
+            previewSection.innerHTML = '';
+            updateButtons();
+            fileInput.value = '';
+            showMessage('All files cleared', 'success');
+        }
+
+        function updateButtons() {
+            const hasFile = selectedFile !== null;
+            cropBtn.disabled = !hasFile;
+            clearBtn.disabled = !hasFile;
+        }
+
+        // UI Functions
+        function showMessage(message, type) {
+            const messageBox = document.createElement('div');
+            messageBox.className = `message-box ${type}`;
+            messageBox.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(messageBox);
+            setTimeout(() => messageBox.remove(), 3000);
+        }
+
+        // AdSense Initialization
+        function initializeAds() {
+            // Replace placeholder divs with actual ad units
+            const adUnits = {
+                'topBannerAd': ADSENSE_CONFIG.topBanner,
+                'leftSidebarAd': ADSENSE_CONFIG.leftSidebar,
+                'rightSidebarAd': ADSENSE_CONFIG.rightSidebar,
+                'bottomBannerAd': ADSENSE_CONFIG.bottomBanner
+            };
+
+            for (const [id, adUnitId] of Object.entries(adUnits)) {
+                const placeholder = document.getElementById(id);
+                if (placeholder && adUnitId !== 'YOUR-TOP-BANNER-AD-UNIT-ID') {
+                    placeholder.innerHTML = `
+                        <ins class="adsbygoogle"
+                             style="display:block"
+                             data-ad-client="${adUnitId}"
+                             data-ad-slot="${adUnitId}"
+                             data-ad-format="auto"
+                             data-full-width-responsive="true"></ins>
+                    `;
+                }
+            }
+        }
+
+        // Initialize ads when the page loads
+        window.addEventListener('load', initializeAds);
+
+        // Add these new functions to your JavaScript
+        function showResultPreview(url, format, quality, size, width, height) {
+            const resultPreview = document.getElementById('resultPreview');
+            const overlay = document.getElementById('overlay');
+            const resultImage = document.getElementById('resultImage');
+            const resultFormat = document.getElementById('resultFormat');
+            const resultQuality = document.getElementById('resultQuality');
+            const resultSize = document.getElementById('resultSize');
+            const resultDimensions = document.getElementById('resultDimensions');
+
+            resultImage.src = url;
+            resultFormat.textContent = format.toUpperCase();
+            resultQuality.textContent = quality;
+            resultSize.textContent = size;
+            resultDimensions.textContent = `${width}x${height}`;
+
+            resultPreview.classList.add('active');
+            overlay.classList.add('active');
+        }
+
+        function closeResultPreview() {
+            const resultPreview = document.getElementById('resultPreview');
+            const overlay = document.getElementById('overlay');
+            resultPreview.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+
+        function downloadResult() {
+            const resultImage = document.getElementById('resultImage');
+            const link = document.createElement('a');
+            link.href = resultImage.src;
+            link.download = `cropped-image-${new Date().getTime()}.${imageFormat.value}`;
+            link.click();
+        }
+
+        // Add these new functions to your JavaScript
+        function updateLivePreview() {
+            if (!cropper) return;
+
+            const livePreviewSection = document.getElementById('livePreviewSection');
+            const originalPreview = document.getElementById('originalPreview');
+            const cropPreview = document.getElementById('cropPreview');
+            const previewFormat = document.getElementById('previewFormat');
+            const previewQuality = document.getElementById('previewQuality');
+            const previewSize = document.getElementById('previewSize');
+            const previewDimensions = document.getElementById('previewDimensions');
+
+            // Show original image
+            originalPreview.src = cropperImage.src;
+
+            // Get crop preview
+            const canvas = cropper.getCroppedCanvas();
+            cropPreview.src = canvas.toDataURL();
+
+            // Update preview info
+            const { width, height } = getImageDimensions();
+            previewFormat.textContent = imageFormat.value.toUpperCase();
+            previewQuality.textContent = imageQuality.value;
+            previewSize.textContent = imageSize.value;
+            previewDimensions.textContent = `${width}x${height}`;
+
+            // Show preview section
+            livePreviewSection.classList.add('active');
+        }
+
+        function handleCropModeChange() {
+            const mode = cropMode.value;
+            presetSizesGroup.style.display = mode === 'preset' ? 'block' : 'none';
+            customSizeGroup.style.display = mode === 'fixed' ? 'block' : 'none';
+            
+            if (cropper) {
+                switch (mode) {
+                    case 'free':
+                        cropper.setAspectRatio(NaN);
+                        break;
+                    case 'fixed':
+                        const width = parseFloat(customWidth.value);
+                        const height = parseFloat(customHeight.value);
+                        if (width && height) {
+                            cropper.setAspectRatio(width / height);
+                        }
+                        break;
+                    case 'preset':
+                        handlePresetSizeChange();
+                        break;
+                }
+            }
+        }
+
+        function handleMeasurementUnitChange() {
+            const newUnit = measurementUnit.value;
+            const oldUnit = document.querySelector('.unit-display').textContent;
+            
+            // Convert values in custom size inputs
+            if (customWidth.value) {
+                customWidth.value = convertUnits(parseFloat(customWidth.value), oldUnit, newUnit).toFixed(2);
+            }
+            if (customHeight.value) {
+                customHeight.value = convertUnits(parseFloat(customHeight.value), oldUnit, newUnit).toFixed(2);
+            }
+
+            // Update unit display
+            document.querySelectorAll('.unit-display').forEach(span => {
+                span.textContent = newUnit;
+            });
+
+            // If a preset size is selected, update it for the new unit
+            if (presetSize.value !== 'custom') {
+                handlePresetSizeChange();
+            }
+        }
+
+        function handlePresetSizeChange() {
+            if (!cropper) return;
+
+            const preset = presetSize.value;
+            const unit = measurementUnit.value;
+            let width, height, isPixels = false;
+
+            switch (preset) {
+                case 'passport':
+                    width = unit === 'inch' ? 1.38 : 35;  // 35mm
+                    height = unit === 'inch' ? 1.77 : 45; // 45mm
+                    break;
+                case 'id':
+                    width = unit === 'inch' ? 3.35 : 85;  // 85mm
+                    height = unit === 'inch' ? 2.13 : 54; // 54mm
+                    break;
+                case 'a4':
+                    width = unit === 'inch' ? 8.27 : 210;  // 210mm
+                    height = unit === 'inch' ? 11.69 : 297; // 297mm
+                    break;
+                case 'business':
+                    width = unit === 'inch' ? 3.35 : 85;  // 85mm
+                    height = unit === 'inch' ? 2.17 : 55; // 55mm
+                    break;
+                case '4x6':
+                    width = unit === 'inch' ? 4 : 102;    // 4 inches
+                    height = unit === 'inch' ? 6 : 152;   // 6 inches
+                    break;
+                case '5x7':
+                    width = unit === 'inch' ? 5 : 127;    // 5 inches
+                    height = unit === 'inch' ? 7 : 178;   // 7 inches
+                    break;
+                case '8x10':
+                    width = unit === 'inch' ? 8 : 203;    // 8 inches
+                    height = unit === 'inch' ? 10 : 254;  // 10 inches
+                    break;
+                case 'letter':
+                    width = unit === 'inch' ? 8.5 : 216;   // 8.5 inches
+                    height = unit === 'inch' ? 11 : 279;   // 11 inches
+                    break;
+                case 'instagram':
+                    width = 1080;
+                    height = 1080;
+                    isPixels = true;
+                    break;
+                case 'facebook':
+                    width = 851;
+                    height = 315;
+                    isPixels = true;
+                    break;
+                case 'twitter':
+                    width = 1500;
+                    height = 500;
+                    isPixels = true;
+                    break;
+                case 'youtube':
+                    width = 1280;
+                    height = 720;
+                    isPixels = true;
+                    break;
+            }
+
+            // Convert to pixels for cropper
+            let pixelWidth, pixelHeight;
+            if (isPixels) {
+                pixelWidth = width;
+                pixelHeight = height;
+            } else {
+                // DPI (dots per inch) for conversion
+                const dpi = 96;
+                if (unit === 'inch') {
+                    pixelWidth = Math.round(width * dpi);
+                    pixelHeight = Math.round(height * dpi);
+                } else { // mm
+                    pixelWidth = Math.round((width * dpi) / 25.4);
+                    pixelHeight = Math.round((height * dpi) / 25.4);
+                }
+            }
+
+            // Update custom size inputs to show the selected dimensions
+            customWidth.value = width;
+            customHeight.value = height;
+
+            // Set the aspect ratio for the cropper
+            cropper.setAspectRatio(pixelWidth / pixelHeight);
+
+            // Update the unit display
+            document.querySelectorAll('.unit-display').forEach(span => {
+                span.textContent = isPixels ? 'px' : unit;
+            });
+
+            // Update preview info
+            const previewDimensions = document.getElementById('previewDimensions');
+            if (previewDimensions) {
+                previewDimensions.textContent = isPixels ? 
+                    `${width}x${height}px` : 
+                    `${width}x${height}${unit}`;
+            }
+        }
+
+        // Add unit conversion function
+        function convertUnits(value, fromUnit, toUnit) {
+            if (fromUnit === toUnit) return value;
+            
+            // Convert to mm first
+            let mmValue;
+            if (fromUnit === 'inch') {
+                mmValue = value * 25.4;
+            } else {
+                mmValue = value;
+            }
+            
+            // Convert mm to target unit
+            if (toUnit === 'inch') {
+                return mmValue / 25.4;
+            }
+            return mmValue;
+        }
+
+        // Add crop control button event listeners
+        document.getElementById('zoomInBtn').addEventListener('click', () => {
+            if (cropper) cropper.zoom(0.1);
+        });
+
+        document.getElementById('zoomOutBtn').addEventListener('click', () => {
+            if (cropper) cropper.zoom(-0.1);
+        });
+
+        document.getElementById('rotateLeftBtn').addEventListener('click', () => {
+            if (cropper) cropper.rotate(-90);
+        });
+
+        document.getElementById('rotateRightBtn').addEventListener('click', () => {
+            if (cropper) cropper.rotate(90);
+        });
+
+        document.getElementById('flipHBtn').addEventListener('click', () => {
+            if (cropper) cropper.scaleX(cropper.getData().scaleX * -1);
+        });
+
+        document.getElementById('flipVBtn').addEventListener('click', () => {
+            if (cropper) cropper.scaleY(cropper.getData().scaleY * -1);
+        });
+
+        // Add fine-tuning control event listeners
+        document.getElementById('moveUpBtn').addEventListener('click', () => {
+            if (cropper) cropper.move(0, -10);
+        });
+
+        document.getElementById('moveDownBtn').addEventListener('click', () => {
+            if (cropper) cropper.move(0, 10);
+        });
+
+        document.getElementById('moveLeftBtn').addEventListener('click', () => {
+            if (cropper) cropper.move(-10, 0);
+        });
+
+        document.getElementById('moveRightBtn').addEventListener('click', () => {
+            if (cropper) cropper.move(10, 0);
+        });
+
+        document.getElementById('expandUpBtn').addEventListener('click', () => {
+            if (cropper) {
+                const data = cropper.getData();
+                cropper.setData({
+                    ...data,
+                    height: data.height + 10
+                });
+            }
+        });
+
+        document.getElementById('expandDownBtn').addEventListener('click', () => {
+            if (cropper) {
+                const data = cropper.getData();
+                cropper.setData({
+                    ...data,
+                    height: data.height - 10
+                });
+            }
+        });
+
+        document.getElementById('expandLeftBtn').addEventListener('click', () => {
+            if (cropper) {
+                const data = cropper.getData();
+                cropper.setData({
+                    ...data,
+                    width: data.width + 10
+                });
+            }
+        });
+
+        document.getElementById('expandRightBtn').addEventListener('click', () => {
+            if (cropper) {
+                const data = cropper.getData();
+                cropper.setData({
+                    ...data,
+                    width: data.width - 10
+                });
+            }
+        });
+
+        // Add keyboard controls
+        document.addEventListener('keydown', (e) => {
+            if (!cropper) return;
+
+            const step = e.shiftKey ? 1 : 10; // Smaller step with shift key
+
+            switch (e.key) {
+                case 'ArrowUp':
+                    e.preventDefault();
+                    cropper.move(0, -step);
+                    break;
+                case 'ArrowDown':
+                    e.preventDefault();
+                    cropper.move(0, step);
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    cropper.move(-step, 0);
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    cropper.move(step, 0);
+                    break;
+                case 'w':
+                case 'W':
+                    e.preventDefault();
+                    const dataUp = cropper.getData();
+                    cropper.setData({
+                        ...dataUp,
+                        height: dataUp.height + step
+                    });
+                    break;
+                case 's':
+                case 'S':
+                    e.preventDefault();
+                    const dataDown = cropper.getData();
+                    cropper.setData({
+                        ...dataDown,
+                        height: dataDown.height - step
+                    });
+                    break;
+                case 'a':
+                case 'A':
+                    e.preventDefault();
+                    const dataLeft = cropper.getData();
+                    cropper.setData({
+                        ...dataLeft,
+                        width: dataLeft.width + step
+                    });
+                    break;
+                case 'd':
+                case 'D':
+                    e.preventDefault();
+                    const dataRight = cropper.getData();
+                    cropper.setData({
+                        ...dataRight,
+                        width: dataRight.width - step
+                    });
+                    break;
+            }
+        });
+
+        // Add rotation slider functionality
+        const rotationSlider = document.getElementById('rotationSlider');
+        const rotationValue = document.getElementById('rotationValue');
+
+        rotationSlider.addEventListener('input', (e) => {
+            const value = e.target.value;
+            rotationValue.textContent = `${value}°`;
+            if (cropper) {
+                cropper.rotateTo(parseFloat(value));
+            }
+        });
+
+        // Update rotation slider when using rotate buttons
+        document.getElementById('rotateLeftBtn').addEventListener('click', () => {
+            if (cropper) {
+                const currentRotation = parseFloat(rotationSlider.value);
+                const newRotation = (currentRotation - 90 + 360) % 360;
+                rotationSlider.value = newRotation;
+                rotationValue.textContent = `${newRotation}°`;
+                cropper.rotate(-90);
+            }
+        });
+
+        document.getElementById('rotateRightBtn').addEventListener('click', () => {
+            if (cropper) {
+                const currentRotation = parseFloat(rotationSlider.value);
+                const newRotation = (currentRotation + 90) % 360;
+                rotationSlider.value = newRotation;
+                rotationValue.textContent = `${newRotation}°`;
+                cropper.rotate(90);
+            }
+        });
+
+        // Add this to your existing JavaScript
+        document.querySelector('.custom-border').addEventListener('click', () => {
+            document.getElementById('customBorderInput').click();
+        });
+
+        document.getElementById('customBorderInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const customBorderBtn = document.querySelector('.custom-border');
+                    const preview = customBorderBtn.querySelector('.template-preview');
+                    preview.style.backgroundImage = `url(${e.target.result})`;
+                    preview.style.backgroundSize = 'cover';
+                    preview.style.border = 'none';
+                    
+                    // Store the custom border image for later use
+                    customBorderBtn.dataset.customBorder = e.target.result;
+                    
+                    showMessage('Custom border uploaded successfully', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Add border template click handlers
+        document.querySelectorAll('.border-template-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                document.querySelectorAll('.border-template-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                // Get the template type
+                const template = btn.dataset.template;
+                
+                // Update border preview based on template
+                const preview = btn.querySelector('.template-preview');
+                preview.style.border = 'none';
+                preview.style.backgroundImage = 'none';
+                
+                switch(template) {
+                    case 'classic':
+                        preview.style.border = '3px solid #000';
+                        break;
+                    case 'modern':
+                        preview.style.border = '2px solid #4f46e5';
+                        preview.style.boxShadow = '0 0 0 4px rgba(79, 70, 229, 0.1)';
+                        break;
+                    case 'vintage':
+                        preview.style.border = '4px solid #8b4513';
+                        preview.style.borderStyle = 'double';
+                        break;
+                    case 'minimal':
+                        preview.style.border = '1px solid #64748b';
+                        break;
+                    case 'double':
+                        preview.style.border = '2px solid #000';
+                        preview.style.boxShadow = '0 0 0 2px #fff, 0 0 0 4px #000';
+                        break;
+                    case 'dashed':
+                        preview.style.border = '2px dashed #4f46e5';
+                        break;
+                    case 'elegant':
+                        preview.style.border = '2px dashed #000';
+                        preview.style.boxShadow = '0 0 0 2px #fff, 0 0 0 4px #000';
+                        break;
+                    case 'fancy':
+                        preview.style.border = '2px dashed #000';
+                        preview.style.boxShadow = '0 0 0 2px #fff, 0 0 0 4px #000';
+                        break;
+                    case 'retro':
+                        preview.style.border = '2px dashed #000';
+                        preview.style.boxShadow = '0 0 0 2px #fff, 0 0 0 4px #000';
+                        break;
+                    case 'shadow':
+                        preview.style.border = '2px dashed #000';
+                        preview.style.boxShadow = '0 0 0 2px #fff, 0 0 0 4px #000';
+                        break;
+                    case 'gradient':
+                        preview.style.border = '2px dashed #000';
+                        preview.style.boxShadow = '0 0 0 2px #fff, 0 0 0 4px #000';
+                        break;
+                    case 'polaroid':
+                        preview.style.border = '2px dashed #000';
+                        preview.style.boxShadow = '0 0 0 2px #fff, 0 0 0 4px #000';
+                        break;
+                }
+                
+                // Update border controls based on template
+                borderWidth.value = template === 'vintage' ? '4' : '2';
+                borderColor.value = template === 'classic' ? '#000000' : 
+                                 template === 'modern' ? '#4f46e5' :
+                                 template === 'vintage' ? '#8b4513' :
+                                 template === 'minimal' ? '#64748b' :
+                                 template === 'double' ? '#000000' :
+                                 template === 'dashed' ? '#4f46e5' : '#000000';
+                                 
+                borderStyle.value = template === 'vintage' ? 'double' :
+                                  template === 'dashed' ? 'dashed' :
+                                  template === 'double' ? 'double' : 'solid';
+                                  
+                showMessage(`Applied ${template} border style`, 'success');
+            });
+        });
+
+        // Add these new functions to your JavaScript
+        function showBorderProperties(template) {
+            const panel = document.getElementById('borderPropertiesPanel');
+            const previewBox = document.getElementById('borderPreviewBox');
+            const previewImage = document.getElementById('borderPreviewImage');
+            
+            // Set initial values based on template
+            borderWidth.value = template === 'vintage' ? '4' : '2';
+            borderColor.value = template === 'classic' ? '#000000' : 
+                             template === 'modern' ? '#4f46e5' :
+                             template === 'vintage' ? '#8b4513' :
+                             template === 'minimal' ? '#64748b' :
+                             template === 'double' ? '#000000' :
+                             template === 'dashed' ? '#4f46e5' : '#000000';
+                             
+            borderStyle.value = template === 'vintage' ? 'double' :
+                              template === 'dashed' ? 'dashed' :
+                              template === 'double' ? 'double' : 'solid';
+
+            // Update preview
+            updateBorderPreview();
+            
+            // Show panel
+            panel.classList.add('active');
+            document.getElementById('overlay').classList.add('active');
+        }
+
+        function closeBorderProperties() {
+            const panel = document.getElementById('borderPropertiesPanel');
+            panel.classList.remove('active');
+            document.getElementById('overlay').classList.remove('active');
+        }
+
+        function updateBorderPreview() {
+            const previewBox = document.getElementById('borderPreviewBox');
+            const width = borderWidth.value;
+            const color = borderColor.value;
+            const style = borderStyle.value;
+            const radius = document.getElementById('borderRadius').value;
+            const opacity = document.getElementById('borderOpacity').value / 100;
+            const shadow = document.getElementById('borderShadow').value;
+            const blur = document.getElementById('borderBlur').value;
+            const spread = document.getElementById('borderSpread').value;
+            const dashPattern = document.getElementById('borderDashPattern').value;
+            const gradient = document.getElementById('borderGradient').value;
+
+            let borderStyle = `${width}px ${style} ${color}`;
+            if (dashPattern && style === 'dashed') {
+                borderStyle = `${width}px ${style} ${color}`;
+                previewBox.style.borderStyle = 'dashed';
+                previewBox.style.borderImage = `repeating-linear-gradient(to right, ${color} 0, ${color} ${dashPattern.split(',')[0]}px, transparent ${dashPattern.split(',')[0]}px, transparent ${parseInt(dashPattern.split(',')[0]) + parseInt(dashPattern.split(',')[1])}px) 1`;
+            } else {
+                previewBox.style.border = borderStyle;
+                previewBox.style.borderImage = 'none';
+            }
+
+            previewBox.style.borderRadius = `${radius}px`;
+            previewBox.style.opacity = opacity;
+            previewBox.style.boxShadow = shadow;
+            previewBox.style.filter = `blur(${blur}px)`;
+            previewBox.style.borderImage = gradient ? gradient : 'none';
+        }
+
+        function applyBorderProperties() {
+            updateBorderPreview();
+            closeBorderProperties();
+            showMessage('Border properties applied successfully', 'success');
+        }
+
+        // Add event listeners for border property changes
+        document.querySelectorAll('.border-property-group input, .border-property-group select').forEach(input => {
+            input.addEventListener('change', updateBorderPreview);
+            input.addEventListener('input', updateBorderPreview);
+        });
+
+        // Modify the border template click handler
+        document.querySelectorAll('.border-template-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const template = btn.dataset.template;
+                showBorderProperties(template);
+            });
+        });
+
+        // Border handling functions
+        function updateBorderPreview() {
+            const width = borderWidth.value;
+            const color = borderColor.value;
+            const style = borderStyle.value;
+            const position = borderPosition.value;
+
+            // Update CSS variables for border
+            document.documentElement.style.setProperty('--border-width', `${width}px`);
+            document.documentElement.style.setProperty('--border-color', color);
+            document.documentElement.style.setProperty('--border-style', style);
+
+            // Update preview containers
+            const previewContainers = document.querySelectorAll('.preview-image-container');
+            previewContainers.forEach(container => {
+                // Reset classes
+                container.className = 'preview-image-container';
+                
+                if (width > 0) {
+                    container.classList.add('with-border');
+                    container.classList.add(`border-${position}`);
+                }
+            });
+
+            // Update border info in preview
+            const previewBorder = document.getElementById('previewBorder');
+            if (previewBorder) {
+                if (width > 0) {
+                    previewBorder.textContent = `${width}px ${style} ${color} (${position})`;
+                } else {
+                    previewBorder.textContent = 'None';
+                }
+            }
+        }
+
+        // Border template handling
+        document.querySelectorAll('.border-template-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.border-template-btn').forEach(b => 
+                    b.classList.remove('active')
+                );
+                
+                btn.classList.add('active');
+                const template = btn.dataset.template;
+                
+                switch(template) {
+                    case 'elegant':
+                        borderWidth.value = '4';
+                        borderColor.value = '#000000';
+                        borderStyle.value = 'solid';
+                        borderPosition.value = 'outside';
+                        break;
+                    case 'fancy':
+                        borderWidth.value = '6';
+                        borderColor.value = '#ffd700';
+                        borderStyle.value = 'solid';
+                        borderPosition.value = 'outside';
+                        break;
+                    case 'retro':
+                        borderWidth.value = '8';
+                        borderColor.value = '#8b4513';
+                        borderStyle.value = 'double';
+                        borderPosition.value = 'outside';
+                        break;
+                    case 'shadow':
+                        borderWidth.value = '1';
+                        borderColor.value = '#dddddd';
+                        borderStyle.value = 'solid';
+                        borderPosition.value = 'outside';
+                        break;
+                    case 'gradient':
+                        borderWidth.value = '4';
+                        borderColor.value = '#ff6b6b';
+                        borderStyle.value = 'solid';
+                        borderPosition.value = 'outside';
+                        break;
+                    case 'polaroid':
+                        borderWidth.value = '20';
+                        borderColor.value = '#ffffff';
+                        borderStyle.value = 'solid';
+                        borderPosition.value = 'outside';
+                        break;
+                    // ... existing cases ...
+                }
+                
+                updateBorderPreview();
+                showMessage(`Applied ${template} border style`, 'success');
+            });
+        });
+
+        // Add event listeners for border controls
+        borderWidth.addEventListener('input', updateBorderPreview);
+        borderColor.addEventListener('input', updateBorderPreview);
+        borderStyle.addEventListener('change', updateBorderPreview);
+        borderPosition.addEventListener('change', updateBorderPreview);
+
+        // Custom border upload handling
+        document.querySelector('.custom-border').addEventListener('click', () => {
+            document.getElementById('customBorderInput').click();
+        });
+
+        document.getElementById('customBorderInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const customBorderBtn = document.querySelector('.custom-border');
+                    const preview = customBorderBtn.querySelector('.template-preview');
+                    preview.style.backgroundImage = `url(${e.target.result})`;
+                    preview.style.backgroundSize = 'cover';
+                    preview.style.border = 'none';
+                    
+                    // Store the custom border image
+                    document.documentElement.style.setProperty('--custom-border-image', `url(${e.target.result})`);
+                    
+                    // Apply custom border
+                    borderWidth.value = '10';
+                    borderStyle.value = 'solid';
+                    updateBorderPreview();
+                    
+                    showMessage('Custom border uploaded successfully', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+
+    <!-- Add this before the closing body tag -->
+    <div class="border-properties-panel" id="borderPropertiesPanel">
+        <div class="border-properties-header">
+            <h2 class="border-properties-title">Border Properties</h2>
+            <button class="border-properties-close" onclick="closeBorderProperties()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="border-properties-content">
+            <div class="border-preview-box" id="borderPreviewBox">
+                <img src="" alt="Border Preview" class="border-preview-image" id="borderPreviewImage">
+            </div>
+            <div class="border-property-group">
+                <label for="borderWidth">Width (px)</label>
+                <input type="number" id="borderWidth" min="0" max="100" value="0">
+            </div>
+            <div class="border-property-group">
+                <label for="borderColor">Color</label>
+                <input type="color" id="borderColor" value="#000000">
+            </div>
+            <div class="border-property-group">
+                <label for="borderStyle">Style</label>
+                <select id="borderStyle">
+                    <option value="solid">Solid</option>
+                    <option value="dashed">Dashed</option>
+                    <option value="dotted">Dotted</option>
+                    <option value="double">Double</option>
+                    <option value="groove">Groove</option>
+                    <option value="ridge">Ridge</option>
+                    <option value="inset">Inset</option>
+                    <option value="outset">Outset</option>
+                </select>
+            </div>
+            <div class="border-property-group">
+                <label for="borderPosition">Position</label>
+                <select id="borderPosition">
+                    <option value="inside">Inside</option>
+                    <option value="outside">Outside</option>
+                    <option value="center">Center</option>
+                </select>
+            </div>
+            <div class="border-property-group">
+                <label for="borderRadius">Corner Radius (px)</label>
+                <input type="number" id="borderRadius" min="0" max="50" value="0">
+            </div>
+            <div class="border-property-group">
+                <label for="borderOpacity">Opacity (%)</label>
+                <input type="number" id="borderOpacity" min="0" max="100" value="100">
+            </div>
+            <div class="border-property-group">
+                <label for="borderShadow">Shadow</label>
+                <input type="text" id="borderShadow" placeholder="0 0 0 0 rgba(0,0,0,0)">
+            </div>
+            <div class="border-property-group">
+                <label for="borderBlur">Blur (px)</label>
+                <input type="number" id="borderBlur" min="0" max="20" value="0">
+            </div>
+            <div class="border-property-group">
+                <label for="borderSpread">Spread (px)</label>
+                <input type="number" id="borderSpread" min="0" max="50" value="0">
+            </div>
+            <div class="border-property-group">
+                <label for="borderDashPattern">Dash Pattern</label>
+                <input type="text" id="borderDashPattern" placeholder="5,5">
+            </div>
+            <div class="border-property-group">
+                <label for="borderGradient">Gradient</label>
+                <input type="text" id="borderGradient" placeholder="linear-gradient(...)">
+            </div>
+            <div class="border-property-group">
+                <label for="borderImage">Border Image</label>
+                <input type="file" id="borderImage" accept="image/*">
+            </div>
+            <div class="border-properties-actions">
+                <button class="btn btn-secondary" onclick="closeBorderProperties()">Cancel</button>
+                <button class="btn btn-primary" onclick="applyBorderProperties()">Apply</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
